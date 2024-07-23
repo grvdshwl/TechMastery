@@ -1,0 +1,11 @@
+1. Custom lodash _get() implementation
+2. Custom lodash _set() implementation
+3. Custom lodash _omit() implementation
+4. Custom String Tokenizer implementation
+5. Custom lodash _chunk() implementation
+6. Promisify the Async Callbacks
+7. Implement Custom React "classnames" library
+8. Implement Custom Redux used "Immer" library
+9. Implement Custom Virtual DOM - I (Serialize)
+10. Implement Custom Virtual DOM - II (Deserialize)
+11. Implement Memoize/Cache identical API calls

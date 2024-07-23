@@ -1,0 +1,91 @@
+Advanced FE Topics
+
+1/ Playing with Binary Data
+
+    ArrayBuffer
+    TypedArray - Uint8, Uint16
+    DataView
+    Blob
+
+2/ Network
+
+    WebSockets
+    Streams
+    WebRTC
+    HTTP/2
+    QUIC
+    Waterfall debugging
+
+3/ Media
+
+    Media Stream
+    Media Recorder
+    Screen Capture
+    Media Devices
+    Web Audio
+
+4/ DOM
+
+    DOM API
+    Intersection Observer
+    Mutation Observer
+    Resize Observer
+    Iframes
+
+5/ Storage, Data, Files
+
+    Cookies
+    Local and Session Storage
+    IndexedDB
+    Clipboard
+    File Reader
+
+6/ Performance
+
+    Web Workers
+    Web Vitals
+    Memory Profiling
+    Worker Threads
+    Web Assembly
+    Animation Frame rate
+    Critical rendering path
+    Memory Heap snapshots
+
+7/ Graphics
+
+    Canvas
+    WebGL
+    SVG
+
+8/ Security
+
+    Trusted Type
+    Permissions
+    Encoding
+    CSP, XSS, Mime Sniff
+
+9/ Build
+
+    Tree Shaking
+    Code Splitting
+    Hot Module Replacement
+    Transpilers and Polyfills
+
+10/ Asset
+
+
+    Client hints
+    Adaptive Media loading
+    Prefetch, Preload
+    Compression Techniques
+    Dynamic Image Loading
+    Lossy and Lossless Conversions
+    Pixel Density and PPI
+
+11/ Delivery Performance
+
+    Script Load techniques
+    Lazy Loading
+    Prefetch, Preload, Preconnect
+    Progressive Images
+    Service Workers caching

@@ -1,4 +1,4 @@
-//* Flow of lectures to take
+//* Flow of lectures to take in order
 
 //* https://www.youtube.com/watch?v=m8Icp_Cid5o
 

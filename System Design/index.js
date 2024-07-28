@@ -10,6 +10,7 @@
 // 9. Design Authentication System
 // 10. Design Unified Payments Interface (UPI)
 // 11. Design Leaderboard
+// 12. Design Elevator
 
 // 𝐌𝐞𝐝𝐢𝐮𝐦
 // 12. Design Instagram

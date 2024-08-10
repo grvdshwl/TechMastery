@@ -1,45 +1,54 @@
-// Simple URL Shortener
+const crypto = require("crypto");
 
 class URLShortener {
-  constructor() {
-    this.urlMap = new Map(); // Map to store the shortened URL and original URL (shortCode -> originalURL)
-    this.counter = 0; // Simple counter for generating unique IDs
-    this.baseURL = "http://short.ly/"; // Base URL for shortened links
+  constructor(baseURL = "http://short.ly/") {
+    this.urlMap = new Map(); // Stores the mapping between shortCode and originalURL
+    this.baseURL = baseURL; // Base URL for shortened links
+  }
+
+  // Shorten a given URL
+  shortenURL(originalURL) {
+    const shortCode = this.createShortCode(originalURL);
+
+    // Store the mapping if it doesn't exist
+    if (!this.urlMap.has(shortCode)) {
+      this.urlMap.set(shortCode, originalURL);
+    }
+
+    return this.formatShortURL(shortCode);
   }
 
   // Generate a short code for a given URL
-  generateShortCode(originalURL) {
-    // Increment the counter to get a unique ID
-    const id = this.counter++;
-    // Convert the ID to a Base62 string (letters + digits)
-    const shortCode = this.encodeBase62(id);
-    // Store the mapping from short code to original URL
-    this.urlMap.set(shortCode, originalURL);
-    // Return the full shortened URL
+  createShortCode(url) {
+    const hash = this.hashURL(url);
+    return hash.slice(0, 8); // Use the first 8 characters of the hash as the short code
+  }
+
+  // Create a hash for the URL using SHA-256
+  hashURL(url) {
+    return crypto.createHash("sha256").update(url).digest("hex");
+  }
+
+  // Format the short URL with the base URL
+  formatShortURL(shortCode) {
     return `${this.baseURL}${shortCode}`;
   }
 
-  // Encode a number as a Base62 string
-  encodeBase62(num) {
-    const chars =
-      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let encoded = "";
-    while (num > 0) {
-      encoded = chars[num % 62] + encoded;
-      num = Math.floor(num / 62);
-    }
-    return encoded || "0";
-  }
-
   // Retrieve the original URL for a given short code
-  getOriginalURL(shortCode) {
+  getOriginalURL(shortURL) {
+    const shortCode = this.extractShortCode(shortURL);
+
     if (!this.urlMap.has(shortCode)) {
       console.log(`Short code ${shortCode} not found`);
       return null;
     }
-    const originalURL = this.urlMap.get(shortCode);
-    console.log(`Original URL for ${shortCode}: ${originalURL}`);
-    return originalURL;
+
+    return this.urlMap.get(shortCode);
+  }
+
+  // Extract the short code from the short URL
+  extractShortCode(shortURL) {
+    return shortURL.replace(this.baseURL, "");
   }
 }
 
@@ -48,11 +57,11 @@ class URLShortener {
 const urlShortener = new URLShortener();
 
 // Shorten a URL
-const shortURL = urlShortener.generateShortCode(
+const shortURL = urlShortener.shortenURL(
   "https://www.example.com/very/long/url"
 );
 console.log(`Shortened URL: ${shortURL}`);
 
 // Retrieve the original URL
-const originalURL = urlShortener.getOriginalURL(shortURL.split("/").pop());
+const originalURL = urlShortener.getOriginalURL(shortURL);
 console.log(`Original URL: ${originalURL}`);

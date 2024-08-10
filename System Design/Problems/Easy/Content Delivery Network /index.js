@@ -43,7 +43,3 @@
 // 9. **Scalability and Redundancy:**
 //    - **Auto-Scaling:** Automatically scale edge servers based on demand to handle traffic spikes.
 //    - **Multi-Region Redundancy:** Deploy edge servers across multiple regions to ensure high availability.
-
-// 10. **CDN Cost Management:**
-//    - **Cost Monitoring:** Track bandwidth usage and cache efficiency to optimize costs.
-//    - **Billing Alerts:** Set up alerts for high usage to avoid unexpected costs.

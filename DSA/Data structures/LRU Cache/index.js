@@ -30,7 +30,6 @@ class LRUCache {
   }
 
   // Insert node at the most recent position (before the right dummy node)
-
   insert(node) {
     let prev = this.right.prev;
     let next = this.right;

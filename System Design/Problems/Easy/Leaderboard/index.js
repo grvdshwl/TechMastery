@@ -1,4 +1,5 @@
 // Leaderboard System Design
+//* https://systemdesign.one/leaderboard-system-design/
 
 // 1. **Data Structure:**
 //    - **Sorted Set:** Use a data structure like a sorted set to store user scores in a way that allows efficient ranking.

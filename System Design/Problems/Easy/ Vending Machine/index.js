@@ -1,5 +1,6 @@
 /*
 System Design Overview - Vending Machine
+//* https://www.youtube.com/watch?v=D0kDMUgo27c
 
 Components:
 

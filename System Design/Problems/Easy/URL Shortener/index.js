@@ -1,5 +1,7 @@
 // URL Shortener System Design
 
+//* https://blog.algomaster.io/p/design-a-url-shortener
+
 // 1. **Core Functionality:**
 //    - **Shortening URLs:** Provide a mechanism to convert long URLs into shorter, fixed-length URLs.
 //    - **Redirecting URLs:** When a user visits the short URL, redirect them to the original long URL.

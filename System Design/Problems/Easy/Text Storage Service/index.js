@@ -1,4 +1,5 @@
 // Text Storage Service System Design
+//* https://www.youtube.com/watch?v=josjRSBqEBI
 
 // 1. **Data Structure:**
 //    - **Text Storage:** Use a key-value store where the key is a unique identifier (e.g., document ID) and the value is the text content.

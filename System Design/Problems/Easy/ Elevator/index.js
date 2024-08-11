@@ -1,4 +1,6 @@
 // Elevator System Design
+
+//* https://medium.com/@neeraj_swe/low-level-design-of-an-elevator-system-e7fc018f356e
 // Designing an elevator system involves a combination of hardware, software, and operational considerations.
 // The goal is to create a system that efficiently transports passengers and goods between floors of a building.
 

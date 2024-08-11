@@ -1,4 +1,5 @@
 // Distributed Job Scheduler System Design
+//* https://towardsdatascience.com/ace-the-system-design-interview-job-scheduling-system-b25693817950
 
 // 1. **Job Queue:**
 //    - Centralized or distributed queue that holds jobs waiting to be processed.

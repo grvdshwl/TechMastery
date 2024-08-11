@@ -1,4 +1,5 @@
 // CDN System Design
+//* https://www.youtube.com/watch?v=8zX0rue2Hic
 
 // 1. **Edge Servers:**
 //    - These are geographically distributed servers that cache content close to the user.

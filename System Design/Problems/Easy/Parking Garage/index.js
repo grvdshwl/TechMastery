@@ -1,4 +1,5 @@
 // Parking Garage System Design
+//* https://www.youtube.com/watch?v=NtMvNh0WFVM
 
 // 1. **Parking Space Management:**
 //    - **Types of Parking Spots:** Designate spots for different vehicle types (e.g., compact, large, electric).

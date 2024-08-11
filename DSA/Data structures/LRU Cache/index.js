@@ -1,10 +1,10 @@
 //* https://neetcode.io/problems/lru-cache
 class Node {
-  constructor(key, val) {
+  constructor(key, value) {
     this.key = key;
-    this.val = val;
-    this.prev = null;
+    this.value = value;
     this.next = null;
+    this.prev = null;
   }
 }
 
@@ -14,8 +14,8 @@ class LRUCache {
     this.cache = new Map();
 
     // Dummy nodes to represent the bounds
-    this.left = new Node(0, 0); // LRU
-    this.right = new Node(0, 0); // Most recent
+    this.left = new Node(null, null); // LRU
+    this.right = new Node(null, null); // MRU
 
     this.left.next = this.right;
     this.right.prev = this.left;
@@ -23,40 +23,40 @@ class LRUCache {
 
   // Remove node from the doubly linked list
   remove(node) {
-    let prev = node.prev;
     let next = node.next;
-
+    let prev = node.prev;
     prev.next = next;
     next.prev = prev;
   }
 
   // Insert node at the most recent position (before the right dummy node)
+
   insert(node) {
     let prev = this.right.prev;
     let next = this.right;
 
     prev.next = node;
-    node.prev = prev;
     node.next = next;
+    node.prev = prev;
     next.prev = node;
   }
 
   get(key) {
-    if (this.cache.has(key)) {
-      // Move the accessed node to the most recent position
-      this.remove(this.cache.get(key));
-      this.insert(this.cache.get(key));
-
-      return this.cache.get(key).val;
+    if (!this.cache.has(key)) {
+      return -1;
     }
 
-    return -1; // Key not found
+    const node = this.cache.get(key);
+    this.remove(node);
+    this.insert(node);
+    return node.value;
   }
 
   put(key, value) {
     if (this.cache.has(key)) {
       // Remove the old node
-      this.remove(this.cache.get(key));
+      const oldNode = this.cache.get(key);
+      this.remove(oldNode);
     }
 
     // Insert the new node
@@ -66,7 +66,7 @@ class LRUCache {
 
     if (this.cache.size > this.capacity) {
       // Remove the LRU node
-      let lru = this.left.next;
+      const lru = this.left.next;
       this.remove(lru);
       this.cache.delete(lru.key);
     }

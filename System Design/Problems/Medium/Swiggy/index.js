@@ -1,4 +1,5 @@
 //* https://www.youtube.com/watch?v=nHh3DnjnPig
+//* https://app.diagrams.net/#G11rmJonBnliUKaVLEQDnswcjx4cds8Zwa#%7B%22pageId%22%3A%22wYuGbLEXMrmzDVs2OPs0%22%7D
 
 //* Food Delivery App Design
 
@@ -6,7 +7,7 @@
 //* 1. Restaurants can upload menus: Restaurants should be able to upload their menu items, including details like name, description, price, and images.
 //* 2. Users can search for restaurants or dishes: Users should be able to search for restaurants or specific dishes based on various criteria like location, cuisine, ratings, and price.
 //* 3. Users can place orders: Users should be able to select items from a menu, add them to a cart, and place an order for delivery or pickup.
-//* 4. Users can track their order: Users should be able to track the status of their order in real-time, from preparation to delivery.
+//* 4. Match a delivery partner and   track their order: Users should be able to track the status of their order in real-time, from preparation to delivery.
 //* 5. Delivery personnel can manage deliveries: Delivery personnel should be able to view and manage their assigned deliveries, update the delivery status, and navigate to delivery locations.
 
 //* Non-Functional Requirements

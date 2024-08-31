@@ -1,5 +1,7 @@
 // What is Apache Kafka?
 
+//*https://www.youtube.com/watch?v=DU8o-OTeoCc
+
 // Apache Kafka is an open-source distributed event streaming platform designed for high-throughput, fault-tolerant, and scalable
 // data streaming and messaging. It is used for building real-time data pipelines and streaming applications.
 

@@ -1,5 +1,5 @@
 // What is Redis?
-
+//* https://www.youtube.com/watch?v=fmT5nlEkl3U
 // Redis is an in-memory data store that can be used as a database, cache, and message broker.
 // It is very fast because it keeps data in memory rather than on disk.
 

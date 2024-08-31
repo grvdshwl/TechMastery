@@ -1,15 +1,17 @@
-// Unified Payment Interface (UPI) System Design
+//* https://www.youtube.com/watch?v=olfaBgJrUBI
 
-//* https://www.youtube.com/watch?v=QpLy0_c_RXk
-// UPI Functional and Non-Functional Requirements
+// Paytm Functional and Non-Functional Requirements
 
 // Functional Requirements
-// 1. Users should be able to link multiple bank accounts.
+// 1. Users should be able to link multiple bank accounts and cards.
 // 2. Users should be able to send and receive money instantly.
 // 3. Users should be able to check account balances.
 // 4. Users should be able to view transaction history.
-// 5. Users should be able to set and use UPI PIN for transactions.
+// 5. Users should be able to set and use a PIN for transactions.
 // 6. Users should be able to pay merchants using QR codes.
+// 7. Users should be able to recharge mobile phones and pay utility bills.
+// 8. Users should be able to book tickets for events, travel, etc.
+// 9. Users should be able to shop online within the app.
 
 // Out of Scope
 // 1. Detailed financial planning tools.
@@ -27,6 +29,8 @@
 // 2. Bank Account
 // 3. Transaction
 // 4. Merchant
+// 5. Bill Payment
+// 6. Booking
 
 // Example API Endpoint: Send Money
 // POST /api/v1/transactions/send
@@ -34,7 +38,7 @@ let sendMoneyData = {
   userId: "123456789",
   receiverId: "987654321",
   amount: 500, // in INR
-  upiPin: "1234",
+  pin: "1234",
   timestamp: "2024-08-31T12:34:56Z",
 };
 
@@ -73,6 +77,30 @@ let transactionData = {
   updatedAt: "date string",
 };
 
+// Bill Payment Data Schema
+let billPaymentData = {
+  billPaymentId: "string",
+  userId: "string",
+  billerId: "string",
+  amount: "number",
+  dueDate: "date string",
+  status: "string", // e.g., pending, paid, failed
+  createdAt: "date string",
+  updatedAt: "date string",
+};
+
+// Booking Data Schema
+let bookingData = {
+  bookingId: "string",
+  userId: "string",
+  bookingType: "string", // e.g., movie, travel, event
+  amount: "number",
+  date: "date string",
+  status: "string", // e.g., confirmed, cancelled, pending
+  createdAt: "date string",
+  updatedAt: "date string",
+};
+
 // Capacity Estimation for 1 Million Active Users
 
 // 1. Number of Users Performing Transactions
@@ -85,16 +113,16 @@ let transactionData = {
 // Total number of transactions per day: 600,000 users * 5 transactions = 3,000,000 transactions
 
 // 3. Data Generated per Transaction
-// Data per transaction: 1 KB (assuming transaction details)
+// Data per transaction: 2 KB (assuming transaction details)
 
 // 4. Total Data Generated per Day
-// Total data per day: 3,000,000 transactions * 1 KB = 3,000,000 KB
-// Convert to GB: 3,000,000 KB / 1,024 / 1,024 ≈ 2.86 GB
+// Total data per day: 3,000,000 transactions * 2 KB = 6,000,000 KB
+// Convert to GB: 6,000,000 KB / 1,024 / 1,024 ≈ 5.72 GB
 
 // 5. Monthly Data Usage
-// Total data generated per month: 2.86 GB/day * 30 days ≈ 85.8 GB
+// Total data generated per month: 5.72 GB/day * 30 days ≈ 171.6 GB
 
 // 6. Storage Considerations
-// Raw storage requirement per month: 85.8 GB
+// Raw storage requirement per month: 171.6 GB
 // Redundancy (e.g., RAID, backups): Double the storage for redundancy and backups
-// Total storage required per month: 85.8 GB * 2 ≈ 171.6 GB
+// Total storage required per month: 171.6 GB * 2 ≈ 343.2 GB

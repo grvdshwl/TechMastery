@@ -1,6 +1,9 @@
 // Hotstar Functional and Non-Functional Requirements
 //* https://www.youtube.com/watch?v=G32ThJakeHk
 
+//* Important Discussions
+//* https://www.youtube.com/watch?v=36N1Bz7qW0A
+
 // Functional Requirements
 // 1. Users should be able to browse and search for content (movies, TV shows, sports).
 // 2. Users should be able to play video content on demand.

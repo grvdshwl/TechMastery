@@ -1,16 +1,17 @@
 //* https://www.youtube.com/watch?v=G32ThJakeHk
+
+//U https://app.diagrams.net/?src=about#G1MY8L__LoIUc0EAm37qjRYXpvtQv53liW%23%7B%22pageId%22%3A%22mCXRlBBDBFRknkiu0M_9%22%7D
 // Zoom Functional and Non-Functional Requirements
 
 // Functional Requirements
 // 1. Users should be able to create and join video meetings.
-// 2. Users should be able to share screens during meetings.
-// 3. Users should be able to chat within meetings.
+// 2. Users should be able to do  one on one calls.
+// 3. Users should be able to share screens during meetings.
 // 4. Users should be able to record meetings.
-// 5. Users should be able to schedule meetings in advance.
 
 // Out of Scope
-// 1. In-depth analytics on user behavior during meetings.
-// 2. Detailed customization of the app's appearance beyond standard settings.
+// 1. Chat during calls
+// 2. Schedule the calls.
 
 // Non-Functional Requirements
 // 1. Performance (smooth video and audio quality even with high user activity).

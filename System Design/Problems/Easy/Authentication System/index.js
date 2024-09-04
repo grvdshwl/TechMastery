@@ -22,10 +22,6 @@ Components:
         - Generates tokens upon successful authentication.
         - Validates and refreshes tokens.
 
-    Session Manager (Optional):
-        - Manages user sessions if using session-based authentication.
-        - Stores session data in-memory or in a database.
-
     Access Control:
         - Controls access to resources based on authentication status.
         - Enforces roles and permissions if needed.

@@ -114,7 +114,7 @@ class VendingMachineController {
 // Create products
 const cola = new Product(1, "Cola", 1.5, 10);
 const chips = new Product(2, "Chips", 2.0, 5);
-const candy = new Product(3, "Candy", 1.0, 10); // Candy is out of stock
+const candy = new Product(3, "Candy", 1.0, 0); // Candy is out of stock
 
 // Create inventory and add products
 const inventory = new Inventory();

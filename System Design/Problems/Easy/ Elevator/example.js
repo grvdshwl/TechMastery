@@ -1,6 +1,6 @@
 class Elevator {
   constructor(bottomFloor, topFloor) {
-    this.currentFloor = 1;
+    this.currentFloor = bottomFloor;
     this.direction = "up"; // Can be 'up' or 'down'
     this.stopRequests = new Set();
     this.topFloor = topFloor;

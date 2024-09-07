@@ -94,30 +94,46 @@ function tokenBucketRateLimit(user) {
 //*------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //* Leaky Bucket Rate Limiting Example in JavaScript
+const LEAKY_BUCKET_CAPACITY = 100; // Maximum number of requests the bucket can hold
+const LEAK_RATE = 1; // Requests processed (leaked) per second
+const MAX_REQUESTS_PER_SECOND = 5; // Maximum requests allowed per second (for stricter burst control)
 
-const LEAKY_BUCKET_CAPACITY = 100; // max capacity of the bucket (in requests)
-const LEAK_RATE = 1; // rate at which the bucket leaks (in requests per second)
-
-const buckets = {};
+const buckets = {}; // Stores the current load and last checked time for each user
 
 function leakyBucketRateLimit(user) {
-  const currentTime = Date.now();
-  const lastChecked = buckets[user]?.lastChecked || currentTime;
-  const currentLoad = buckets[user]?.currentLoad || 0;
+  const currentTime = Date.now(); // Current time
+  const lastChecked = buckets[user]?.lastChecked || currentTime; // Last time the bucket was checked
+  const currentLoad = buckets[user]?.currentLoad || 0; // Current load (requests in the bucket)
 
-  // Calculate how much the bucket has leaked since the last check
-  const timeElapsed = (currentTime - lastChecked) / 1000; // convert milliseconds to seconds
-  const leakedAmount = Math.floor(timeElapsed * LEAK_RATE);
+  // Calculate how many requests have leaked (been processed) since the last check
+  const timeElapsed = (currentTime - lastChecked) / 1000; // Time elapsed in seconds
+  const leakedAmount = Math.floor(timeElapsed * LEAK_RATE); // Requests leaked based on LEAK_RATE
 
-  // Calculate the new load in the bucket, ensuring it doesn't drop below 0
+  // Update the bucket's current load (cannot be negative)
   const newLoad = Math.max(currentLoad - leakedAmount, 0);
 
-  if (newLoad < LEAKY_BUCKET_CAPACITY) {
-    // Allow the request and add one unit to the current load
-    buckets[user] = { currentLoad: newLoad + 1, lastChecked: currentTime };
-    return true; // request allowed
+  // Calculate how many requests have been made in the last second
+  const requestsThisSecond = buckets[user]?.requestsThisSecond || 0;
+
+  // If the bucket is not full and rate limit for the second is not exceeded
+  if (
+    newLoad < LEAKY_BUCKET_CAPACITY &&
+    requestsThisSecond < MAX_REQUESTS_PER_SECOND
+  ) {
+    // Increment the count for requests made in the current second
+    const timeSinceLastChecked = Math.floor((currentTime - lastChecked) / 1000);
+    const updatedRequestsThisSecond =
+      timeSinceLastChecked > 0 ? 1 : requestsThisSecond + 1;
+
+    // Update the bucket's state with the new load and current time
+    buckets[user] = {
+      currentLoad: newLoad + 1, // Add the new request
+      lastChecked: currentTime,
+      requestsThisSecond: updatedRequestsThisSecond, // Track requests in the current second
+    };
+    return true; // Request allowed
   } else {
-    // Deny the request as the bucket is full
-    return false; // request denied
+    // Deny the request as either bucket is full or max rate per second is exceeded
+    return false; // Request denied
   }
 }

@@ -11,7 +11,7 @@
 // Latency vs Throughput
 // Synchronous vs. asynchronous communications
 // Batch Processing vs Stream Processing
-// Realtional vs Non Relational Database
+// Relational vs Non Relational Database
 // TCP vs UDP
 // Normalization vs. Denormalization
 // Monolithic vs. Microservices Architecture

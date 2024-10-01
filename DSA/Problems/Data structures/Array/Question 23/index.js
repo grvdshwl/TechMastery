@@ -20,7 +20,6 @@ function findDisappearedNumbers(nums) {
       nums[index] = -nums[index];
     }
   }
-
   // Check which indices were not marked as negative
   for (let i = 0; i < nums.length; i++) {
     if (nums[i] > 0) {

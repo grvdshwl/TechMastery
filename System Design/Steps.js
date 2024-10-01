@@ -4,7 +4,7 @@
 // 4. Actual Design
 
 // Revision
-// 1. Concepts - 1 day
-// 2. Decision Making -1 day
-// 3. Fundamentasls - 3 days
-// 4. Problems - 5 days
+// 1. Concepts - 2 day
+// 2. Decision Making -2 day
+// 3. Fundamentasls - 5 days
+// 4. Problems - 10 days

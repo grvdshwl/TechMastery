@@ -7,7 +7,7 @@
 |   - Fundamentals                | System Design Fundamentals            | 5 days             |
 |   - Problems                    | Problem-solving in System Design      | 7 days             |
 | DSA                             | Data Structures & Algorithms          | 30 days            |
-| JavaScript Fundamentals         | Core JavaScript concepts               | 20 days            |
+| JS Fundamentals + Implementation| Core JavaScript concepts               | 20 days            |
 | React Fundamentals              | Core React concepts                    | 5 days             |
 | Miscellaneous + Important + Git | Misc topics and Git                    | 5 days             |
 | Machine Coding                  | Practical coding skills                | 10 days            |

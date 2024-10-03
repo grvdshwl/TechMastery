@@ -32,3 +32,20 @@ So: X ≈ 2.98 questions/day
 |  Weekend questions |      ≈ 6 questions/day|                       |
 |-------------------|-----------------------|-----------------------|
 */
+
+/*|-------------------|-------------------|
+|      Category      |   Number of Questions |
+|-------------------|-------------------|
+|       Stack        |         10         |
+|       Tree         |         25         |
+|       Trie         |         5          |
+|      Greedy        |         20         |
+|       Graph        |         20         |
+| Dynamic Programming|         30         |
+|      Binary        |         10         |
+|      Matrix        |         5          |
+|       Heap         |         10         |
+|  Backtracking      |         5          |
+|    Recursion       |         10         |
+|-------------------|-------------------|
+*/

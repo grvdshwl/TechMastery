@@ -1,19 +1,19 @@
-//* Search a 2D Matrix
-//* Koko Eating Bananas
-//* Search Insert Position
+//* Longest Repeating character replacement
+//* Frequency of The Most Frequent Element
+//* Minimum Swaps to Group All 1's Together II
 
-//* Guess Number Higher Or Lower
-//* Arranging Coins
-//* Squares of a Sorted Array
+//* Minimum Size Subarray Sum
+//* Minimum swaps required to bring all elements less than or equal to k together-
+//*  Sliding Window Maximum
+//* Minimise the maximum difference between heights
+//* Sliding Subarray Beauty
 
-//* Valid Perfect Square
-//* Sqrt(x)
-//* Single Element in a Sorted Array
+//* Max Consecutive Ones III
+//* Maximum Sum of Distinct Subarrays With Length K
+//* Count Number of Nice Subarrays
+//* Count Number of Good Subarrays
+//*  Maximum Points You Can Obtain from Cards
 
-//* Capacity to Ship Packages
-//* Find Peak Element
-//*  Distribute Candies to People
-
-//* Successful Pairs of Spells and Potions
-//* Find First And Last Position of Element In Sorted Array
-//* Allocate Minimum Number of Pages from N books to M students
+//* Longest substring without reapeating characters ---done
+//* Permutation In String
+//* Minimum Window substring

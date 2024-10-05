@@ -1,6 +1,6 @@
 //*Count the Number of Good Subarrays
 
-var numberOfSubarrays = function (nums, k) {
+var countGood = function (nums, k) {
   const n = nums.length;
   let map = {};
   let result = 0;
@@ -10,16 +10,21 @@ var numberOfSubarrays = function (nums, k) {
 
   while (right < n) {
     let num = nums[right];
-    goodPairs += map[num] || 0;
     map[num] = (map[num] || 0) + 1;
+    if (map[num] >= 2) {
+      const numCount = map[num];
+      goodPairs += numCount - 1;
+    }
 
     while (goodPairs >= k) {
-      goodPairs -= map[nums[left]] - 1;
+      result += n - right;
+
+      const leftNumCount = map[nums[left]];
+      goodPairs -= leftNumCount - 1;
       map[nums[left]]--;
       left++;
     }
 
-    result += left;
     right++;
   }
   return result;

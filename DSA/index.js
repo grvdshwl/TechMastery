@@ -8,7 +8,7 @@
 |    Two Pointer     |         20         |
 |       String       |         15         |
 |    Linked List     |         20         |
-|        Math        |         20         |
+|        Math        |         9          |
 |       Stack        |         10         |
 |      Interval      |          8         |
 |-------------------|-------------------|
@@ -36,7 +36,6 @@ So: X ≈ 2.98 questions/day
 /*|-------------------|-------------------|
 |      Category      |   Number of Questions |
 |-------------------|-------------------|
-|       Stack        |         10         |
 |       Tree         |         25         |
 |       Trie         |         5          |
 |      Greedy        |         20         |

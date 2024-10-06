@@ -1,33 +1,42 @@
 //* Permutation In String
 var checkInclusion = function (s1, s2) {
-  let map = {};
+  let charMap = {};
 
   for (let char of s1) {
-    map[char] = (map[char] || 0) + 1;
+    charMap[char] = (charMap[char] || 0) + 1;
   }
+  let have = Object.keys(charMap).length;
 
-  let i = 0;
-  let j = 0;
+  let need = 0;
+  let windowMap = {};
 
-  while (j < s2.length) {
-    let char = s2[j];
+  let left = 0;
+  let right = 0;
+  let n1 = s1.length;
+  let n2 = s2.length;
 
-    if (!map[char]) {
-      if (i < j) {
-        map[s2[i]] += 1;
-        i++;
-      } else {
-        i++;
-        j++;
-      }
-    } else {
-      map[char] -= 1;
+  while (right < n2) {
+    let char = s2[right];
+    windowMap[char] = (windowMap[char] || 0) + 1;
 
-      if (j - i + 1 === s1.length) {
-        return true;
-      }
-      j++;
+    if (charMap[char] && windowMap[char] === charMap[char]) {
+      need++;
     }
+
+    if (right - left + 1 > n1) {
+      let leftChar = s2[left];
+      if (charMap[leftChar] && windowMap[leftChar] === charMap[leftChar]) {
+        need--;
+      }
+      windowMap[leftChar]--;
+      left++;
+    }
+
+    if (have === need) {
+      return true;
+    }
+
+    right++;
   }
 
   return false;

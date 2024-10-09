@@ -10,23 +10,17 @@ const getKey = (str) => {
 
   return key.join(",");
 };
+
 var findAnagrams = function (s, p) {
-  let key = getKey(p);
+  const result = [];
+  const mainKey = getKey(p);
+  const wordLimit = p.length;
 
-  let result = [];
-  let n = p.length;
-
-  let set = new Set(p.split(""));
-  for (let i = 0; i < s.length; i++) {
-    if (!set.has(s[i])) {
-      continue;
-    }
-    let newKey = getKey(s.slice(i, i + n));
-
-    if (key === newKey) {
+  for (let i = 0; i <= s.length - wordLimit; i++) {
+    const currentKey = getKey(s.slice(i, i + wordLimit));
+    if (currentKey === mainKey) {
       result.push(i);
     }
   }
-
   return result;
 };

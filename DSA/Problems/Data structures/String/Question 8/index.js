@@ -1,4 +1,4 @@
-//* //* 	Maximum Number of Balloons
+//* 	Maximum Number of Balloons
 
 /**
  * Example 1:
@@ -29,7 +29,7 @@ function maxNumberOfBalloons(text) {
     balloon["a"],
     Math.floor(balloon["l"] / 2),
     Math.floor(balloon["o"] / 2),
-    balloon["n"],
+    balloon["n"]
   );
 }
 

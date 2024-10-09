@@ -6,9 +6,9 @@
 |   Binary Search    |         20         |
 |   Sliding Window   |         20         |
 |    Two Pointer     |         20         |
+|        Math        |         9          |
 |       String       |         15         |
 |    Linked List     |         20         |
-|        Math        |         9          |
 |       Stack        |         10         |
 |      Interval      |          8         |
 |      Greedy        |          20       |

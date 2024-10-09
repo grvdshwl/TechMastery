@@ -11,6 +11,8 @@
 |        Math        |         9          |
 |       Stack        |         10         |
 |      Interval      |          8         |
+|      Greedy        |          20       |
+
 |-------------------|-------------------|
 */
 
@@ -38,7 +40,6 @@ So: X ≈ 2.98 questions/day
 |-------------------|-------------------|
 |       Tree         |         25         |
 |       Trie         |         5          |
-|      Greedy        |         20         |
 |       Graph        |         20         |
 | Dynamic Programming|         30         |
 |      Binary        |         10         |

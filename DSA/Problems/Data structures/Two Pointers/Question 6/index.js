@@ -15,37 +15,41 @@
 let nums = [2, 2, 2, 2, 2];
 let target = 8;
 
-const fourSum = function (nums, target) {
-  const result = [];
-  nums.sort((a, b) => a - b);
+var fourSum = function (nums, target) {
+  nums.sort((a, b) => a - b); // Sort the array
 
-  for (let i = 0; i < nums.length - 3; i++) {
+  let result = [];
+  let n = nums.length;
+
+  for (let i = 0; i < n; i++) {
+    // Skip duplicates for the first number
     if (i > 0 && nums[i] === nums[i - 1]) {
       continue;
     }
 
-    for (let j = i + 1; j < nums.length - 2; j++) {
+    for (let j = i + 1; j < n; j++) {
+      // Skip duplicates for the second number
       if (j > i + 1 && nums[j] === nums[j - 1]) {
         continue;
       }
 
       let left = j + 1;
-      let right = nums.length - 1;
+      let right = n - 1;
 
       while (left < right) {
         const sum = nums[i] + nums[j] + nums[left] + nums[right];
 
         if (sum === target) {
-          const quads = [nums[i], nums[j], nums[left], nums[right]];
-          result.push(quads);
-
+          result.push([nums[i], nums[j], nums[left], nums[right]]);
           left++;
           right--;
 
+          // Skip duplicates for the third number
           while (left < right && nums[left] === nums[left - 1]) {
             left++;
           }
 
+          // Skip duplicates for the fourth number
           while (left < right && nums[right] === nums[right + 1]) {
             right--;
           }
@@ -57,6 +61,7 @@ const fourSum = function (nums, target) {
       }
     }
   }
+
   return result;
 };
 

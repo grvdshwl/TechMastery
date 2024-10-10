@@ -1,8 +1,4 @@
-//* Encode and decode strings
-//* Longest Common Prefix
-
 //* Find next greater number with same set of digits. [Very Very IMP]
-//* Word Pattern
 
 //* Roman To Integer
 //* Integer To Roman

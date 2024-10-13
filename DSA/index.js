@@ -9,8 +9,8 @@
 |        Math        |         9          |
 |       String       |         15         |
 |    Linked List     |         15         |
-|       Stack        |         10         |
 |      Interval      |          8         |
+|       Stack        |         10         |
 |      Greedy        |          15       |
 
 |-------------------|-------------------|

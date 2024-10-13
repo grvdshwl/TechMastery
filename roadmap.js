@@ -1,17 +1,23 @@
 /*
-| Topic                          | Focus Areas                           | Days Allocated     |
-|---------------------------------|---------------------------------------|--------------------|
+| Topic                          | Focus Areas                                   | Days Allocated     |
+|---------------------------------|-----------------------------------------------|--------------------|
 | System Design                   | Concepts, Decision Making, Fundamentals, Problems | 15 days total      |
-|   - Concepts                    | System Design Concepts                | 2 days             |
-|   - Decision Making             | Design Decision Making                | 1 day              |
-|   - Fundamentals                | System Design Fundamentals            | 5 days             |
-|   - Problems                    | Problem-solving in System Design      | 7 days             |
-| DSA                             | Data Structures & Algorithms          | 30 days            |
-| JS Fundamentals + Implementation| Core JavaScript concepts               | 20 days            |
-| React Fundamentals              | Core React concepts                    | 5 days             |
-| Miscellaneous + Important + Git | Misc topics and Git                    | 5 days             |
-| Machine Coding                  | Practical coding skills                | 10 days            |
-| Security and Performance        | Security and performance considerations| 5 days             |
+|   - Concepts                    | System Design Concepts                        | 2 days             |
+|   - Decision Making             | Design Decision Making                        | 1 day              |
+|   - Fundamentals                | System Design Fundamentals                    | 5 days             |
+|   - Problems                    | Problem-solving in System Design              | 7 days             |
+| DSA                             | Data Structures & Algorithms                  | 30 days            |
+| JS Fundamentals + Implementation| Core JavaScript concepts                      | 20 days            |
+| React Fundamentals              | Core React concepts                           | 5 days             |
+| Miscellaneous + Important + Git | Misc topics and Git                           | 5 days             |
+| Machine Coding                  | Practical coding skills                       | 10 days            |
+| Security and Performance        | Security and performance considerations       | 5 days             |
+| Testing                         | Testing strategies, tools, and best practices | 3 days             |
+| Next.js                         | Next.js concepts, implementation              | 3 days             |
+| React Native                    | React Native concepts, mobile app development | 3 days             |
+| Design Patterns                 | Common design patterns in development         | 3 days             |
+|---------------------------------|-----------------------------------------------|--------------------|
+| Total                           |                                               | 102 days           |
 */
 
 //* https://www.youtube.com/watch?v=M2RpzmyKfvQ

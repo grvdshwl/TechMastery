@@ -1,5 +1,3 @@
-//* Multiply Strings
-
 //* Reverse a Linked List
 //* Reverse a Linked List II
 //* LRU Cache
@@ -16,7 +14,6 @@
 //* Circular LinkedList
 //* remove value from linked list
 
-//* Add Two Numbers
 //*Remove Duplicates from Sorted List
 //* Rotate List
 //* Reverse Nodes In K Group

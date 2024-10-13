@@ -8,8 +8,9 @@ const multiply = (num1, num2) => {
 
   num1 = num1.split("").reverse().join("");
   num2 = num2.split("").reverse().join("");
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
+
+  for (let j = 0; j < n; j++) {
+    for (let i = 0; i < m; i++) {
       const product = Number(num1[i]) * Number(num2[j]);
 
       res[i + j] += product;
@@ -22,4 +23,4 @@ const multiply = (num1, num2) => {
 
   return res.join("");
 };
-console.log(multiply("15", "16"));
+console.log(multiply("123", "456"));

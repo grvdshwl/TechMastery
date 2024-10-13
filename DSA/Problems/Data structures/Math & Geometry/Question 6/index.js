@@ -1,24 +1,28 @@
 //* 	 Pow(x, n)
-var myPow = function (x, n) {
-  function helper(x, n) {
-    if (x === 0) {
-      return 0;
-    }
-    if (n === 0) {
-      return 1;
-    }
-
-    let res = helper(x, Math.floor(n / 2));
-    res = res * res;
-
-    if (n % 2) {
-      return res * x;
-    } else {
-      return res;
-    }
+function calculatePower(x, n) {
+  if (n === 0) {
+    return 1;
   }
 
-  let result = helper(x, Math.abs(n));
+  let newPower = Math.floor(n / 2);
 
-  return n >= 0 ? result : 1 / result;
+  let half = calculatePower(x, newPower);
+
+  if (n % 2 === 0) {
+    return half * half;
+  } else {
+    return half * half * x;
+  }
+}
+
+var myPow = function (x, n) {
+  if (x === 0) {
+    return 0;
+  }
+
+  const absolutePower = Math.abs(n);
+
+  const result = calculatePower(x, absolutePower);
+
+  return n < 0 ? 1 / result : result;
 };

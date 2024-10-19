@@ -17,30 +17,37 @@ var rotateRight = function (head, k) {
   if (!head || k === 0) {
     return head;
   }
+  const dummy = new ListNode(0, null);
+  dummy.next = head;
 
   // Calculate the length of the linked list and find the tail
-  let length = 1;
-  let tail = head;
-  while (tail && tail.next) {
+  let tail = dummy;
+  let length = 0;
+
+  while (tail.next) {
     tail = tail.next;
     length++;
   }
-
   // Calculate the effective rotation
-  k = k % length;
 
+  k = k % length;
   // If no rotation is needed, return the original list
+
   if (k === 0) {
     return head;
   }
 
+  //* Find rotations needed
+
+  let current = dummy;
   // Find the new head after rotation
-  let current = head;
-  for (let i = 0; i < length - k - 1; i++) {
+
+  for (let i = 0; i < length - k; i++) {
     current = current.next;
   }
 
   // Set the new head and update pointers to rotate the linked list
+
   let newHead = current.next;
   current.next = null;
   tail.next = head;

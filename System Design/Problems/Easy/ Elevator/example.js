@@ -1,62 +1,89 @@
+const directions = {
+  UP: "UP",
+  DOWN: "DOWN",
+};
+
 class Elevator {
-  constructor(bottomFloor, topFloor) {
-    this.currentFloor = bottomFloor;
-    this.direction = "up"; // Can be 'up' or 'down'
-    this.stopRequests = new Set();
-    this.topFloor = topFloor;
+  constructor(bottomFloor = 0, topFloor = 10) {
+    this.stopRequests = new Set(); // renamed for clarity
     this.bottomFloor = bottomFloor;
+    this.topFloor = topFloor;
+    this.direction = directions.UP;
+    this.currentFloor = bottomFloor;
   }
 
-  addStopRequests(floorRequests) {
-    floorRequests.forEach((floor) => this.stopRequests.add(floor));
+  openDoor() {
+    this.logAction("opened");
   }
 
-  run() {
-    while (this.stopRequests.size > 0) {
-      if (this.direction === "up") {
-        this.moveUp();
-        if (this.stopRequests.has(this.currentFloor)) {
-          this.stopRequests.delete(this.currentFloor);
-          this.openDoors();
-          this.closeDoors();
-        }
-        if (this.currentFloor === this.topFloor) {
-          this.direction = "down";
-        }
-      } else {
-        this.moveDown();
-        if (this.stopRequests.has(this.currentFloor)) {
-          this.stopRequests.delete(this.currentFloor);
-          this.openDoors();
-          this.closeDoors();
-        }
-        if (this.currentFloor === this.bottomFloor) {
-          this.direction = "up";
-        }
-      }
+  closeDoor() {
+    this.logAction("closed");
+  }
+
+  logAction(action) {
+    console.log(`---------------------`);
+    console.log(`Door ${action} for floor ${this.currentFloor}.`);
+    console.log(`---------------------`);
+  }
+
+  addStop(floor) {
+    if (floor >= this.bottomFloor && floor <= this.topFloor) {
+      this.stopRequests.add(floor);
+    } else {
+      console.warn(`Invalid stop: Floor ${floor} is out of range.`);
     }
   }
 
+  move() {
+    this.direction === directions.UP ? this.moveUp() : this.moveDown();
+  }
+
   moveUp() {
-    this.currentFloor += 1;
+    if (this.currentFloor < this.topFloor) {
+      this.currentFloor++;
+    }
   }
 
   moveDown() {
-    this.currentFloor -= 1;
+    if (this.currentFloor > this.bottomFloor) {
+      this.currentFloor--;
+    }
   }
 
-  openDoors() {
-    console.log("Doors opening at floor", this.currentFloor);
+  shouldChangeDirection() {
+    if (this.currentFloor === this.topFloor) {
+      this.direction = directions.DOWN;
+    } else if (this.currentFloor === this.bottomFloor) {
+      this.direction = directions.UP;
+    }
   }
 
-  closeDoors() {
-    console.log("Doors closing at floor", this.currentFloor);
+  processFloor() {
+    if (this.stopRequests.has(this.currentFloor)) {
+      this.openDoor();
+      this.closeDoor();
+      this.stopRequests.delete(this.currentFloor);
+    }
+  }
+
+  runElevator() {
+    while (this.stopRequests.size > 0) {
+      this.move();
+      this.processFloor();
+      this.shouldChangeDirection();
+    }
   }
 }
 
-// Usage Example
-const elevator = new Elevator(1, 10); // Assume a building with floors 1 through 10
-elevator.addStopRequests([3, 5, 7, 2]); // Add stop requests
-elevator.run(); // Start the elevator operation
-elevator.addStopRequests([4, 8, 9]);
-elevator.run(); // Start the elevator operation
+// Example usage
+const elevator = new Elevator(0, 10);
+
+[
+  elevator.addStop(4),
+  elevator.addStop(8),
+  elevator.addStop(2),
+  elevator.addStop(10),
+  elevator.addStop(3),
+];
+
+elevator.runElevator();

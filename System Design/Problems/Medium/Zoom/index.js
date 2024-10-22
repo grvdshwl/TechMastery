@@ -1,6 +1,6 @@
 //* https://www.youtube.com/watch?v=G32ThJakeHk
 
-//U https://app.diagrams.net/?src=about#G1MY8L__LoIUc0EAm37qjRYXpvtQv53liW%23%7B%22pageId%22%3A%22mCXRlBBDBFRknkiu0M_9%22%7D
+// https://app.diagrams.net/?src=about#G1MY8L__LoIUc0EAm37qjRYXpvtQv53liW%23%7B%22pageId%22%3A%22mCXRlBBDBFRknkiu0M_9%22%7D
 // Zoom Functional and Non-Functional Requirements
 
 // Functional Requirements

@@ -25,6 +25,18 @@
 // 3. 1 billion matches per day
 // 4. 500k new users daily
 
+//* Recommendation Requirements
+
+// 1. Filter inactive users
+//    - Remove users who have not been active within a specified timeframe.
+
+// 2. Filter users based on distance
+//    - Only include users within a specified distance, e.g., 50km from the current user.
+
+// 3. Adjust filtering based on match activity
+//    - For users with high match activity: tighten filtering criteria to ensure higher quality matches.
+//    - For users with low match activity: relax filtering criteria to increase the chance of finding matches.
+
 //* Capacity Estimation
 
 // 1. **User Storage**:
@@ -64,15 +76,3 @@ let userData = {
     interests: ["Dance", "Choreography", "Fitness"],
   },
 };
-
-//* Recommendation Requirements
-
-// 1. Filter inactive users
-//    - Remove users who have not been active within a specified timeframe.
-
-// 2. Filter users based on distance
-//    - Only include users within a specified distance, e.g., 50km from the current user.
-
-// 3. Adjust filtering based on match activity
-//    - For users with high match activity: tighten filtering criteria to ensure higher quality matches.
-//    - For users with low match activity: relax filtering criteria to increase the chance of finding matches.

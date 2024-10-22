@@ -1,29 +1,10 @@
-//* Amazon
-//* Facebook
+//* Whatsapp call
 
-//* Twitter
-//* Hot star
+//* Hotstar
 
-//* Instgram
-//* Youtube
-
-//* Notification Service
-//* Large Download Service
-
-//* Zoom
-//* Telegram
+//* add ons
 
 //* Uber
-//* Tinder
-
-//* Swiggy
-//* Spotify
-
-//* Netflix
 //* Google Search
-
-//* Analytics Platform
-//* Book My show
-
 //* Paytm
 //* UPI

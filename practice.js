@@ -1,12 +1,3 @@
-//* Security like XSS,CSFR,DDOS
-//* Fundamentals
-
-//* LRU Cache
-
-//* Merge K Sorted Lists
-
-//* Reorder List
-
 //* Merge Intervals
 //* Non-overlapping Intervals
 

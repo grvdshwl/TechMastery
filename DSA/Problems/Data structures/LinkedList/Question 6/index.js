@@ -2,59 +2,49 @@
 
 //* Time complexity ---> O(n)
 
-class ListNode {
-  constructor(val, next = null) {
-    this.val = val;
-    this.next = next;
-  }
-}
+var reorderList = function (head) {
+  // Edge case: return if the list has less than 2 nodes
+  if (!head || !head.next) return head;
 
-function reorderList(head) {
-  if (!head || !head.next) {
-    return head;
-  }
-
-  // Step 1: Find the middle of the linked list
-  let slow = head;
-  let fast = head;
-
-  while (fast && fast.next) {
+  // Step 1: Split the list into two halves
+  let slow = head,
+    fast = head;
+  while (fast && fast.next && fast.next.next) {
     slow = slow.next;
     fast = fast.next.next;
   }
 
-  // Step 2: Reverse the second half of the linked list
-  let secondHalf = reverseList(slow.next);
+  let secondHalf = slow.next;
+  // Split the list by setting the end of the first half to null
+  slow.next = null;
 
-  slow.next = null; // Break the connection between the two halves
-
-  // Step 3: Merge the two halves
-  mergeLists(head, secondHalf);
-}
-
-function reverseList(head) {
+  // Step 2: Reverse the second half of the list
   let prev = null;
-  let current = head;
+  while (secondHalf) {
+    let temp = secondHalf.next;
+    secondHalf.next = prev;
+    prev = secondHalf;
+    secondHalf = temp;
+  }
+  secondHalf = prev; // `prev` is now the new head of the reversed second half
 
-  while (current) {
-    let nextNode = current.next;
-    current.next = prev;
-    prev = current;
-    current = nextNode;
+  // Step 3: Merge the two halves back together
+  let firstHalf = head;
+  let dummy = new ListNode(0);
+  let result = dummy;
+
+  while (firstHalf || secondHalf) {
+    if (firstHalf) {
+      result.next = firstHalf;
+      result = result.next;
+      firstHalf = firstHalf.next;
+    }
+    if (secondHalf) {
+      result.next = secondHalf;
+      result = result.next;
+      secondHalf = secondHalf.next;
+    }
   }
 
-  return prev;
-}
-
-function mergeLists(list1, list2) {
-  while (list2) {
-    let temp1 = list1.next;
-    let temp2 = list2.next;
-
-    list1.next = list2;
-    list2.next = temp1;
-
-    list1 = temp1;
-    list2 = temp2;
-  }
-}
+  return dummy.next;
+};

@@ -139,3 +139,25 @@ var person2 = { userAge: 24 };
 // Calling methods
 person.getAge.call(person2); // Regular function, `this` bound to `person2`, output: 24
 person.getAgeArrow.call(person2); // Arrow function, `this` is lexical, output: undefined
+
+//* Explicit Binding do not effect arrow functions
+function Person() {
+  this.age = 25;
+  // Regular function
+  this.growOld = function () {
+    console.log(this.age);
+  };
+  // Arrow function
+  this.growOlder = () => {
+    console.log(this.age);
+  };
+}
+
+const person = new Person();
+
+// Explicit binding
+const growOldBound = person.growOld.bind({ age: 50 });
+growOldBound(); // 50, `this` is bound to { age: 50 }
+
+const growOlderBound = person.growOlder.bind({ age: 50 });
+growOlderBound(); // 25, `this` is still bound to the `Person` instance

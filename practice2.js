@@ -1,5 +1,4 @@
-//* This Keyword
-//* Revison - call bind apply, and objects
+//* Revison - call bind apply,this
 
 //* Promises -
 //* Revision  -  closure and currying

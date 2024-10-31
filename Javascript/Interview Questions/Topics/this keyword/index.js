@@ -1,112 +1,107 @@
-// Question 1: Variable vs property
+// * Explain this keyword in JavaScript
 
-// What logs to console the following code snippet:
-const object = {
-  message: "Hello, World!",
+// The 'this' keyword in JavaScript refers to the context in which a function is called.
+// Its value is determined by how a function is invoked, not where it is defined.
 
-  getMessage() {
-    const message = "Hello, Earth!";
-    return this.message;
-  },
-};
+/*
+Summary:
 
-console.log(object.getMessage()); // What is logged?
-// Expand answer
+1. The mystery of this:
+   - In JavaScript, "this" refers to the context of a function invocation, not necessarily the current object instance.
+   - Four function invocation types: function invocation, method invocation, constructor invocation, and indirect invocation.
+   - Understanding function invocation and its impact on the context is crucial.
 
-// Question 2: Cat name
+2. Function invocation:
+   - Occurs when a function is called normally with parentheses.
+   - The context of "this" in function invocation is the global object, except in strict mode where it's undefined.
 
-// What logs to console the following code snippet:
-function Pet(name) {
-  this.name = name;
+   Example:
+   function showThis() {
+       console.log(this);
+   }
+   showThis(); // In non-strict mode, logs the global object (window in browsers). In strict mode, it logs undefined.
 
-  this.getName = () => this.name;
-}
+3. Method invocation:
+   - Occurs when a function is called as a property of an object.
+   - "this" in method invocation refers to the object owning the method.
 
-const cat = new Pet("Fluffy");
+   Example:
+   const obj = {
+       name: 'Alice',
+       greet: function() {
+           console.log(`Hello, ${this.name}`);
+       }
+   };
+   obj.greet(); // Logs: "Hello, Alice"
 
-console.log(cat.getName()); // What is logged?
+4. Constructor invocation:
+   - Occurs when a function is called with the "new" keyword.
+   - "this" in constructor invocation refers to the newly created object.
 
-const { getName } = cat;
-console.log(getName()); // What is logged?
-// Expand answer
+   Example:
+   function Person(name) {
+       this.name = name;
+   }
+   const person1 = new Person('Bob');
+   console.log(person1.name); // Logs: "Bob"
 
-// Question 3: Delayed greeting
+5. Indirect invocation:
+   - Occurs when a function is called using "call()" or "apply()" methods.
+   - "this" in indirect invocation is determined by the first argument of "call()" or "apply()".
 
-// What logs to console the following code snippet:
-const object2 = {
-  message: "Hello, World!",
+   Example:
+   function greet() {
+       console.log(`Hello, ${this.name}`);
+   }
+   const user = { name: 'Charlie' };
+   greet.call(user); // Logs: "Hello, Charlie"
 
-  logMessage() {
-    console.log(this.message); // What is logged?
-  },
-};
+6. Bound function:
+   - Created using the "bind()" method to bind a specific context and/or arguments to a function.
+   - "this" in bound functions is predetermined and cannot be changed.
 
-setTimeout(object2.logMessage, 1000);
-// Expand answer
+   Example:
+   function greet() {
+       console.log(`Hello, ${this.name}`);
+   }
+   const user = { name: 'Diana' };
+   const greetUser = greet.bind(user);
+   greetUser(); // Logs: "Hello, Diana"
 
-// Question 4: Artificial method
+7. Arrow function:
+   - A concise way to declare functions with a lexical "this" binding.
+   - "this" in arrow functions is inherited from the surrounding lexical context and cannot be modified.
 
-// How can you call logMessage function so that it logs "Hello, World!"?
-const object3 = {
-  message: "Hello, World!",
-};
+   Example:
+   const obj = {
+       name: 'Eve',
+       greet: () => {
+           console.log(`Hello, ${this.name}`); // 'this' does not refer to obj
+       }
+   };
+   obj.greet(); // Logs: "Hello, undefined" (since `this` is inherited from the global scope)
 
-function logMessage() {
-  console.log(this.message); // "Hello, World!"
-}
+8. Common pitfalls:
+   - Forgetting to use "new" with constructors.
+   - Defining methods using arrow functions, which may lead to unexpected "this" behavior.
 
-// Expand answer
+   Example of a common pitfall:
+   const obj = {
+       name: 'Frank',
+       greet: () => {
+           console.log(`Hello, ${this.name}`); // 'this' does not refer to obj
+       }
+   };
+   obj.greet(); // Logs: "Hello, undefined"
+   // Here, we should use a regular function to maintain the correct context.
+   // Correct way:
+   const objFixed = {
+       name: 'Grace',
+       greet: function() {
+           console.log(`Hello, ${this.name}`); // Now 'this' refers to objFixed
+       }
+   };
+   objFixed.greet(); // Logs: "Hello, Grace"
 
-// Question 5: Greeting and farewell
-
-// What logs to console the following code snippet:
-const object4 = {
-  who: "World",
-
-  greet() {
-    return `Hello, ${this.who}!`;
-  },
-
-  farewell: () => {
-    return `Goodbye, ${this.who}!`;
-  },
-};
-
-console.log(object4.greet()); // What is logged?
-console.log(object4.farewell()); // What is logged?
-// Expand answer
-
-// Question 6: Tricky length
-
-// What logs to console the following code snippet:
-var length = 4;
-function callback() {
-  console.log(this.length); // What is logged?
-}
-
-const object5 = {
-  length: 5,
-  method(callback) {
-    callback();
-  },
-};
-
-object5.method(callback, 1, 2);
-// Expand answer
-
-// Question 7: Calling arguments
-
-// What logs to console the following code snippet:
-var length = 4;
-function callback() {
-  console.log(this.length); // What is logged?
-}
-
-const object6 = {
-  length: 5,
-  method() {
-    arguments[0]();
-  },
-};
-
-object6.method(callback, 1, 2);
+Overall, understanding the nuances of "this" in JavaScript is essential for writing robust and predictable code.
+*/

@@ -10,7 +10,7 @@
 // git checkout feature-branch
 
 // 2. Rebase onto the main branch:
-// git rebase main
+// git rebase origin/main
 // This moves all your commits to the top of the `main` branch's latest state.
 
 // 3. Resolve any conflicts that may happen during rebase.

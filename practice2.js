@@ -1,5 +1,3 @@
-//* Promises -
-//* Revision  -  closure and currying
-
-//* Revision
-//* Functions,  and event propogation
+//* Roadside coder important 12 polyfills
+//* Once
+//* Memoize

@@ -5,6 +5,9 @@ Function.prototype.customBind = function (context = {}, ...args) {
   if (typeof this !== "function") {
     throw new Error(this + "It's not callable");
   }
+  if (!context) {
+    context = {};
+  }
   context.fn = this;
 
   return function (...newArgs) {
@@ -21,7 +24,9 @@ Function.prototype.customApply = function (context = {}, argsArray = []) {
   if (!Array.isArray(argsArray)) {
     throw new Error("Args should be array");
   }
-
+  if (!context) {
+    context = {};
+  }
   context.fn = this;
 
   return context.fn(...argsArray);
@@ -32,7 +37,9 @@ Function.prototype.customCall = function (context = {}, ...args) {
   if (typeof this !== "function") {
     throw new Error(this + "It's not callable");
   }
-
+  if (!context) {
+    context = {};
+  }
   context.fn = this;
 
   return context.fn(...args);

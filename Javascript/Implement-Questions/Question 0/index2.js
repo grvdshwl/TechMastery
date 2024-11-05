@@ -16,4 +16,4 @@ function clockAngle(hour, minutes) {
 }
 
 // Example usage
-console.log(clockAngle(5, 30)); // Output should be 7.5
+console.log(clockAngle(5, 30)); // Output should be 15

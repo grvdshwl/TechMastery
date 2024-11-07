@@ -1,13 +1,19 @@
 // 1. What is Node.js?
 
-// Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. It allows developers to write server-side code using JavaScript, which was traditionally a client-side language. Node.js is event-driven, non-blocking, and uses an asynchronous, single-threaded event loop architecture. This makes it suitable for building scalable and high-performance applications, particularly for I/O-heavy tasks like web servers, real-time communication, and APIs.
+// Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. It allows developers to write server-side code using JavaScript, which was traditionally a
+//  client-side language. Node.js is event-driven, non-blocking, and uses an asynchronous, single-threaded event loop architecture.
+//  This makes it suitable for building scalable and high-performance applications, particularly for I/O-heavy tasks like web servers, real-time communication, and APIs.
 
 // 2. How does Node.js work?
 
-// Node.js operates on a single-threaded event loop. When an I/O operation (like reading a file or querying a database) is performed, Node.js does not block the execution thread. Instead, it registers a callback and moves on to the next task. Once the I/O operation is complete, the callback function is executed. This asynchronous, non-blocking model allows Node.js to handle a large number of simultaneous connections efficiently without needing multiple threads.
+// Node.js operates on a single-threaded event loop.
+// When an I/O operation (like reading a file or querying a database) is performed, Node.js does not block the execution thread. Instead,
+// it registers a callback and moves on to the next task. Once the I/O operation is complete, the callback function is executed.
+// This asynchronous, non-blocking model allows Node.js to handle a large number of simultaneous connections efficiently without needing multiple threads.
 
 // Example:
-// If we perform a file read operation using fs.readFile(), the event loop allows other operations to continue while the file is being read in the background, and the callback is executed when the file is ready.
+// If we perform a file read operation using fs.readFile(),
+// the event loop allows other operations to continue while the file is being read in the background, and the callback is executed when the file is ready.
 
 // 3. What are the key features of Node.js?
 
@@ -22,7 +28,9 @@
 
 // 4. What is the event loop in Node.js?
 
-// The event loop is the core feature of Node.js that allows it to handle multiple operations concurrently without blocking the execution of other tasks. It continuously checks if there are any tasks or events to process and executes them. In Node.js, when a task (like reading a file or handling an HTTP request) is initiated, it’s passed to the event loop, which processes it asynchronously while other tasks continue to run in parallel.
+// The event loop is the core feature of Node.js that allows it to handle multiple operations concurrently without blocking the execution of other tasks.
+// It continuously checks if there are any tasks or events to process and executes them. In Node.js, when a task (like reading a file or handling an HTTP request) is initiated,
+// it’s passed to the event loop, which processes it asynchronously while other tasks continue to run in parallel.
 
 // The event loop consists of multiple phases:
 // - Timers: Executes callback functions scheduled by setTimeout() and setInterval().
@@ -37,13 +45,29 @@
 
 // 5. What is the difference between `require` and `import` in Node.js?
 
-// - `require` is the older method used to import modules in Node.js. It is synchronous and loads the module into memory when it’s required.
+// `require` is the older, CommonJS-based method used in Node.js for importing modules.
+// It is **synchronous**, meaning it loads the module into memory at the point it is required,
+// blocking further code execution until the module is loaded.
+// Common in older Node.js projects, and compatible with all versions of Node.js.
 // Example:
 // const fs = require('fs');
 
-// - `import` is part of the ECMAScript modules (ESM) specification and is an asynchronous, more modern way to import modules. It is used in recent versions of Node.js (version 12 and above), but Node.js requires setting the "type": "module" in the package.json file to enable ESM.
+// `import` is part of the ECMAScript Module (ESM) specification, the modern standard for JavaScript modules.
+// It is **asynchronous**, and supports features like top-level `await` and tree-shaking (optimization of unused exports).
+// Supported in Node.js versions 12 and above, but requires setting `"type": "module"` in the `package.json` to enable ESM.
+// Unlike `require`, `import` is **hoisted**, meaning it loads all imported modules before the rest of the code executes.
 // Example:
 // import fs from 'fs';
+
+// Summary of Differences:
+//
+// | Feature           | `require` (CommonJS)           | `import` (ESM)               |
+// |-------------------|---------------------------------|------------------------------|
+// | Module System     | CommonJS                        | ECMAScript Modules (ESM)     |
+// | Synchronous/Async | Synchronous                     | Asynchronous                 |
+// | Hoisting          | No (loads on-demand)           | Yes (hoisted to the top)     |
+// | Node.js Support   | All versions                    | Node.js 12+ (with `"type": "module"`) |
+// | Use Case          | Legacy/older Node.js projects   | Modern, modular JavaScript   |
 
 // Note: While `require` is widely supported in Node.js, `import` is still emerging as the default choice for modern JavaScript modules.
 
@@ -106,7 +130,8 @@
 
 // 9. What is a callback function in Node.js?
 
-// A callback function is a function that is passed as an argument to another function and is executed when that function completes its operation. In Node.js, callback functions are commonly used for handling asynchronous operations like reading files, making network requests, and interacting with databases.
+// A callback function is a function that is passed as an argument to another function and is executed when that function completes its operation.
+//  In Node.js, callback functions are commonly used for handling asynchronous operations like reading files, making network requests, and interacting with databases.
 
 // Example of a callback function:
 fs.readFile("example.txt", "utf8", (err, data) => {
@@ -120,7 +145,8 @@ fs.readFile("example.txt", "utf8", (err, data) => {
 
 // 10. What is the role of the `process` object in Node.js?
 
-// The `process` object in Node.js provides information about and control over the current Node.js process. It allows developers to access command-line arguments, environment variables, and exit codes. It also allows for terminating the process or performing cleanup operations.
+// The `process` object in Node.js provides information about and control over the current Node.js process.
+//  It allows developers to access command-line arguments, environment variables, and exit codes. It also allows for terminating the process or performing cleanup operations.
 
 // Example:
 // process.env.PORT = 3000; // Setting environment variable

@@ -1,21 +1,22 @@
-// 1. Selecting all columns from a table
+// 1. Selecting all documents from a collection
 // SQL:
 // SELECT * FROM employees;
-/* Sequelize: */
-// await Employee.findAll();
+await db.collection("employees").find().toArray();
 /* Expected Output:
 [
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 2, name: "Bob", department: "HR", salary: 50000 },
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 2, name: "Bob", department: "HR", salary: 50000 },
   ...
 ]
 */
 
-// 2. Selecting specific columns
+// 2. Selecting specific fields
 // SQL:
 // SELECT name, department FROM employees;
-/* Sequelize: */
-// await Employee.findAll({ attributes: ['name', 'department'] });
+await db
+  .collection("employees")
+  .find({}, { projection: { name: 1, department: 1 } })
+  .toArray();
 /* Expected Output:
 [
   { name: "Alice", department: "Engineering" },
@@ -27,105 +28,117 @@
 // 3. Filtering with WHERE
 // SQL:
 // SELECT * FROM employees WHERE department = 'Engineering';
-/* Sequelize: */
-// await Employee.findAll({ where: { department: 'Engineering' } });
+await db.collection("employees").find({ department: "Engineering" }).toArray();
 /* Expected Output:
 [
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 3, name: "Charlie", department: "Engineering", salary: 80000 }
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 3, name: "Charlie", department: "Engineering", salary: 80000 }
 ]
 */
 
 // 4. Using ORDER BY to sort results
 // SQL:
 // SELECT * FROM employees ORDER BY salary DESC;
-/* Sequelize: */
-// await Employee.findAll({ order: [['salary', 'DESC']] });
+await db.collection("employees").find().sort({ salary: -1 }).toArray();
 /* Expected Output:
 [
-  { id: 3, name: "Charlie", department: "Engineering", salary: 80000 },
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 2, name: "Bob", department: "HR", salary: 50000 }
+  { _id: 3, name: "Charlie", department: "Engineering", salary: 80000 },
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 2, name: "Bob", department: "HR", salary: 50000 }
 ]
 */
 
-// 5. Using LIMIT to restrict the number of rows
+// 5. Using LIMIT to restrict the number of documents
 // SQL:
 // SELECT * FROM employees LIMIT 2;
-/* Sequelize: */
-// await Employee.findAll({ limit: 2 });
+await db.collection("employees").find().limit(2).toArray();
 /* Expected Output:
 [
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 2, name: "Bob", department: "HR", salary: 50000 }
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 2, name: "Bob", department: "HR", salary: 50000 }
 ]
 */
 
-// 6. Counting rows
+// 6. Counting documents
 // SQL:
 // SELECT COUNT(*) FROM employees;
-/* Sequelize: */
-// await Employee.count();
-/* Expected Output: 5 (assuming there are 5 rows in the employees table) */
+await db.collection("employees").countDocuments();
+/* Expected Output: 5 (assuming there are 5 documents in the employees collection) */
 
 // 7. Grouping and counting with GROUP BY
 // SQL:
 // SELECT department, COUNT(*) as total FROM employees GROUP BY department;
-/* Sequelize: */
-// await Employee.findAll({
-//   attributes: ['department', [Sequelize.fn('COUNT', Sequelize.col('*')), 'total']],
-//   group: 'department'
-// });
+await db
+  .collection("employees")
+  .aggregate([{ $group: { _id: "$department", total: { $count: {} } } }])
+  .toArray();
 /* Expected Output:
 [
-  { department: "Engineering", total: 2 },
-  { department: "HR", total: 1 },
-  { department: "Marketing", total: 2 }
+  { _id: "Engineering", total: 2 },
+  { _id: "HR", total: 1 },
+  { _id: "Marketing", total: 2 }
 ]
 */
 
 // 8. Aggregating with SUM
 // SQL:
 // SELECT department, SUM(salary) as total_salary FROM employees GROUP BY department;
-/* Sequelize: */
-// await Employee.findAll({
-//   attributes: ['department', [Sequelize.fn('SUM', Sequelize.col('salary')), 'total_salary']],
-//   group: 'department'
-// });
+await db
+  .collection("employees")
+  .aggregate([
+    { $group: { _id: "$department", total_salary: { $sum: "$salary" } } },
+  ])
+  .toArray();
 /* Expected Output:
 [
-  { department: "Engineering", total_salary: 150000 },
-  { department: "HR", total_salary: 50000 },
-  { department: "Marketing", total_salary: 90000 }
+  { _id: "Engineering", total_salary: 150000 },
+  { _id: "HR", total_salary: 50000 },
+  { _id: "Marketing", total_salary: 90000 }
 ]
 */
 
 // 9. Using HAVING to filter groups
 // SQL:
 // SELECT department, SUM(salary) as total_salary FROM employees GROUP BY department HAVING total_salary > 60000;
-/* Sequelize: */
-// await Employee.findAll({
-//   attributes: ['department', [Sequelize.fn('SUM', Sequelize.col('salary')), 'total_salary']],
-//   group: 'department',
-//   having: Sequelize.where(Sequelize.fn('SUM', Sequelize.col('salary')), '>', 60000)
-// });
+await db
+  .collection("employees")
+  .aggregate([
+    { $group: { _id: "$department", total_salary: { $sum: "$salary" } } },
+    { $match: { total_salary: { $gt: 60000 } } },
+  ])
+  .toArray();
 /* Expected Output:
 [
-  { department: "Engineering", total_salary: 150000 },
-  { department: "Marketing", total_salary: 90000 }
+  { _id: "Engineering", total_salary: 150000 },
+  { _id: "Marketing", total_salary: 90000 }
 ]
 */
 
-// 10. Joining two tables
+// 10. Joining two collections
 // SQL:
 // SELECT employees.name, departments.department_name
 // FROM employees
 // JOIN departments ON employees.department_id = departments.id;
-/* Sequelize: */
-// await Employee.findAll({
-//   attributes: ['name'],
-//   include: [{ model: Department, attributes: ['department_name'] }]
-// });
+await db
+  .collection("employees")
+  .aggregate([
+    {
+      $lookup: {
+        from: "departments",
+        localField: "department_id",
+        foreignField: "_id",
+        as: "department_info",
+      },
+    },
+    { $unwind: "$department_info" },
+    {
+      $project: {
+        name: 1,
+        department_name: "$department_info.department_name",
+      },
+    },
+  ])
+  .toArray();
 /* Expected Output:
 [
   { name: "Alice", department_name: "Engineering" },
@@ -139,11 +152,26 @@
 // SELECT employees.name, departments.department_name
 // FROM employees
 // LEFT JOIN departments ON employees.department_id = departments.id;
-/* Sequelize: */
-// await Employee.findAll({
-//   attributes: ['name'],
-//   include: [{ model: Department, attributes: ['department_name'], required: false }]
-// });
+await db
+  .collection("employees")
+  .aggregate([
+    {
+      $lookup: {
+        from: "departments",
+        localField: "department_id",
+        foreignField: "_id",
+        as: "department_info",
+      },
+    },
+    { $unwind: { path: "$department_info", preserveNullAndEmptyArrays: true } },
+    {
+      $project: {
+        name: 1,
+        department_name: "$department_info.department_name",
+      },
+    },
+  ])
+  .toArray();
 /* Expected Output:
 [
   { name: "Alice", department_name: "Engineering" },
@@ -155,47 +183,51 @@
 // 12. Using BETWEEN for range filtering
 // SQL:
 // SELECT * FROM employees WHERE salary BETWEEN 60000 AND 80000;
-/* Sequelize: */
-// await Employee.findAll({ where: { salary: { [Op.between]: [60000, 80000] } } });
+await db
+  .collection("employees")
+  .find({ salary: { $gte: 60000, $lte: 80000 } })
+  .toArray();
 /* Expected Output:
 [
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 3, name: "Charlie", department: "Engineering", salary: 80000 }
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 3, name: "Charlie", department: "Engineering", salary: 80000 }
 ]
 */
 
 // 13. Using IN for multiple values
 // SQL:
 // SELECT * FROM employees WHERE department IN ('Engineering', 'HR');
-/* Sequelize: */
-// await Employee.findAll({ where: { department: { [Op.in]: ['Engineering', 'HR'] } } });
+await db
+  .collection("employees")
+  .find({ department: { $in: ["Engineering", "HR"] } })
+  .toArray();
 /* Expected Output:
 [
-  { id: 1, name: "Alice", department: "Engineering", salary: 70000 },
-  { id: 2, name: "Bob", department: "HR", salary: 50000 }
+  { _id: 1, name: "Alice", department: "Engineering", salary: 70000 },
+  { _id: 2, name: "Bob", department: "HR", salary: 50000 }
 ]
 */
 
-// 14. Updating a record
+// 14. Updating a document
 // SQL:
 // UPDATE employees SET salary = 72000 WHERE name = 'Alice';
-/* Sequelize: */
-// await Employee.update({ salary: 72000 }, { where: { name: 'Alice' } });
+await db
+  .collection("employees")
+  .updateOne({ name: "Alice" }, { $set: { salary: 72000 } });
 /* Expected Output:
 {
-  message: "1 row updated",
-  rowsAffected: 1
+  message: "1 document updated",
+  modifiedCount: 1
 }
 */
 
-// 15. Deleting records
+// 15. Deleting documents
 // SQL:
 // DELETE FROM employees WHERE department = 'Marketing';
-/* Sequelize: */
-// await Employee.destroy({ where: { department: 'Marketing' } });
+await db.collection("employees").deleteMany({ department: "Marketing" });
 /* Expected Output:
 {
-  message: "2 rows deleted",
-  rowsAffected: 2
+  message: "2 documents deleted",
+  deletedCount: 2
 }
 */

@@ -1,3 +1,164 @@
+const { MongoClient } = require("mongodb");
+
+async function run() {
+  const client = new MongoClient("mongodb://localhost:27017", {
+    useUnifiedTopology: true,
+  });
+
+  try {
+    await client.connect();
+    const db = client.db("testdb");
+
+    // 1. Find All Documents in a Collection
+    const employees = await db.collection("employees").find().toArray();
+    console.log("All Employees:", employees);
+    /* Expected Output:
+    [
+      { _id: ObjectId("..."), name: "Alice", department: "Engineering", salary: 70000 },
+      { _id: ObjectId("..."), name: "Bob", department: "HR", salary: 50000 },
+      ...
+    ]
+    */
+
+    // 2. Find Documents with a Specific Condition
+    const engineers = await db
+      .collection("employees")
+      .find({ department: "Engineering" })
+      .toArray();
+    console.log("Engineering Employees:", engineers);
+    /* Expected Output:
+    [
+      { _id: ObjectId("..."), name: "Alice", department: "Engineering", salary: 70000 },
+      { _id: ObjectId("..."), name: "Charlie", department: "Engineering", salary: 80000 }
+    ]
+    */
+
+    // 3. Find Specific Fields in Documents
+    const employeeNames = await db
+      .collection("employees")
+      .find({}, { projection: { name: 1, department: 1 } })
+      .toArray();
+    console.log("Employee Names and Departments:", employeeNames);
+    /* Expected Output:
+    [
+      { _id: ObjectId("..."), name: "Alice", department: "Engineering" },
+      { _id: ObjectId("..."), name: "Bob", department: "HR" }
+    ]
+    */
+
+    // 4. Sorting Documents
+    const sortedEmployees = await db
+      .collection("employees")
+      .find()
+      .sort({ salary: -1 })
+      .toArray();
+    console.log("Employees Sorted by Salary:", sortedEmployees);
+    /* Expected Output:
+    [
+      { _id: ObjectId("..."), name: "Charlie", salary: 80000 },
+      { _id: ObjectId("..."), name: "Alice", salary: 70000 },
+      { _id: ObjectId("..."), name: "Bob", salary: 50000 }
+    ]
+    */
+
+    // 5. Using LIMIT to Restrict the Number of Rows
+    const limitedEmployees = await db
+      .collection("employees")
+      .find()
+      .limit(2)
+      .toArray();
+    console.log("Limited Employees:", limitedEmployees);
+    /* Expected Output:
+    [
+      { _id: ObjectId("..."), name: "Alice", department: "Engineering", salary: 70000 },
+      { _id: ObjectId("..."), name: "Bob", department: "HR", salary: 50000 }
+    ]
+    */
+
+    // 6. Counting Rows
+    const employeeCount = await db.collection("employees").countDocuments();
+    console.log("Employee Count:", employeeCount);
+    /* Expected Output: 5 (assuming there are 5 rows in the employees collection) */
+
+    // 7. Grouping and Counting with GROUP BY
+    const groupCount = await db
+      .collection("employees")
+      .aggregate([{ $group: { _id: "$department", total: { $count: {} } } }])
+      .toArray();
+    console.log("Group and Count:", groupCount);
+    /* Expected Output:
+    [
+      { _id: "Engineering", total: 2 },
+      { _id: "HR", total: 1 },
+      { _id: "Marketing", total: 2 }
+    ]
+    */
+
+    // 8. Aggregating with SUM
+    const totalSalaries = await db
+      .collection("employees")
+      .aggregate([
+        { $group: { _id: "$department", total_salary: { $sum: "$salary" } } },
+      ])
+      .toArray();
+    console.log("Total Salaries by Department:", totalSalaries);
+    /* Expected Output:
+    [
+      { _id: "Engineering", total_salary: 150000 },
+      { _id: "HR", total_salary: 50000 },
+      { _id: "Marketing", total_salary: 90000 }
+    ]
+    */
+
+    // 9. Using HAVING to Filter Groups
+    const havingFilter = await db
+      .collection("employees")
+      .aggregate([
+        { $group: { _id: "$department", total_salary: { $sum: "$salary" } } },
+        { $match: { total_salary: { $gt: 60000 } } },
+      ])
+      .toArray();
+    console.log("Departments with Total Salary > 60000:", havingFilter);
+    /* Expected Output:
+    [
+      { _id: "Engineering", total_salary: 150000 },
+      { _id: "Marketing", total_salary: 90000 }
+    ]
+    */
+
+    // 10. Joining Two Collections
+    const employeeDepartments = await db
+      .collection("employees")
+      .aggregate([
+        {
+          $lookup: {
+            from: "departments",
+            localField: "department_id",
+            foreignField: "_id",
+            as: "department_info",
+          },
+        },
+        { $unwind: "$department_info" },
+        { $project: { name: 1, "department_info.department_name": 1 } },
+      ])
+      .toArray();
+    console.log("Employee Departments:", employeeDepartments);
+    /* Expected Output:
+    [
+      { name: "Alice", department_name: "Engineering" },
+      { name: "Bob", department_name: "HR" },
+      ...
+    ]
+    */
+  } finally {
+    await client.close();
+  }
+}
+
+run().catch(console.dir);
+
+//*------------------------------------------------*//
+
 // 1. How do you perform a basic join in MongoDB (similar to SQL joins)?
 // Using $lookup to join employees and departments collections.
 // MongoDB Query:

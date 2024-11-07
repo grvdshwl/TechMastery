@@ -1,5 +1,17 @@
 //* Roadside coder important  polyfills - Promise and others
 
+//* DBs
+
+//* SQL
+//* MongoDB
+
+//* Node JS
+//*Express JS
+//* code walkthrough
+
+//* Interview questions
+//* redis
+
 /*
     Comparison of MySQL, PostgreSQL, MongoDB, and Redis
 

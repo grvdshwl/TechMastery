@@ -116,3 +116,63 @@
   { name: "Liam", salary: 70000, salary_rank: 3 }
 ]
 */
+
+// 1. Find all employees whose names start with "A"
+// Query:
+// SELECT name
+// FROM employees
+// WHERE name LIKE 'A%';
+
+// 2. Find all products that contain the word "laptop" anywhere in the name
+// Query:
+// SELECT product_name
+// FROM products
+// WHERE product_name LIKE '%laptop%';
+
+// 3. Find all customers whose email ends with "example.com"
+// Query:
+// SELECT email
+// FROM customers
+// WHERE email LIKE '%@example.com';
+
+// 4. Find all employees whose names contain "an" anywhere in the name
+// Query:
+// SELECT name
+// FROM employees
+// WHERE name LIKE '%an%';
+
+// 5. Find all orders where the order code starts with "ORD" and is followed by any number of digits
+// Query:
+// SELECT order_code
+// FROM orders
+// WHERE order_code LIKE 'ORD%';
+
+// 6. Find all cities whose names start with the letter "S" and are followed by exactly 3 characters
+// Query:
+// SELECT city_name
+// FROM cities
+// WHERE city_name LIKE 'S___';
+
+// 7. Find all employees whose names end with "son"
+// Query:
+// SELECT name
+// FROM employees
+// WHERE name LIKE '%son';
+
+// 8. Find all students whose names start with "J" and contain at least one vowel
+// Query:
+// SELECT name
+// FROM students
+// WHERE name LIKE 'J%a%' OR name LIKE 'J%e%' OR name LIKE 'J%i%' OR name LIKE 'J%o%' OR name LIKE 'J%u%';
+
+// 9. Find all orders where the order description contains "express" but not "standard"
+// Query:
+// SELECT order_description
+// FROM orders
+// WHERE order_description LIKE '%express%' AND order_description NOT LIKE '%standard%';
+
+// 10. Find all customers whose name starts with "C" and ends with "son"
+// Query:
+// SELECT name
+// FROM customers
+// WHERE name LIKE 'C%son';

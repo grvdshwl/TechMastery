@@ -1,197 +1,174 @@
 /**
- * Data Normalization in SQL
- *
- * Data normalization is the process of organizing data in a database to reduce redundancy and improve data integrity.
- * It involves structuring the database into multiple tables and defining relationships between them.
- * The goal of normalization is to eliminate undesirable characteristics like data anomalies, redundancy, and inconsistency.
- */
-
-/**
- * 1. First Normal Form (1NF)
- * - A table is in 1NF if it contains only atomic (indivisible) values and each record is unique.
- * - No repeating groups or arrays in any column. Every column must contain a single value.
+ * First Normal Form (1NF)
+ * - Using row order to convey information is not permitted.
+ * - Mixing data types within a column is not permitted.
+ * - Each record must have a primary key.
+ * - Repeating groups or arrays are not allowed.
  *
  * Example:
- * Incorrect 1NF table:
+ * Incorrect Table (violates 1NF):
+ * | StudentID | Name    | Subjects          |
+ * |-----------|---------|-------------------|
+ * | 1         | Alice   | Math, Science     |
+ * | 2         | Bob     | English, History  |
  *
- * | studentID | studentName | courses              |
- * |-----------|-------------|----------------------|
- * | 1         | John        | Math, Science        |
- * | 2         | Jane        | History, English     |
- *
- * Corrected 1NF table:
- *
- * | studentID | studentName | course    |
- * |-----------|-------------|-----------|
- * | 1         | John        | Math      |
- * | 1         | John        | Science   |
- * | 2         | Jane        | History   |
- * | 2         | Jane        | English   |
- *
- * SQL Table Creation for 1NF:
- * ```sql
- * CREATE TABLE students (
- *     studentID INT PRIMARY KEY,
- *     studentName VARCHAR(100)
- * );
- * CREATE TABLE courses (
- *     studentID INT,
- *     course VARCHAR(100),
- *     FOREIGN KEY (studentID) REFERENCES students(studentID)
- * );
- * ```
+ * Correct Table (normalized to 1NF):
+ * | StudentID | Name    | Subject   |
+ * |-----------|---------|-----------|
+ * | 1         | Alice   | Math      |
+ * | 1         | Alice   | Science   |
+ * | 2         | Bob     | English   |
+ * | 2         | Bob     | History   |
  */
 
 /**
- * 2. Second Normal Form (2NF)
- * - A table is in 2NF if it is in 1NF and all non-key attributes are fully dependent on the primary key.
- * - Eliminate partial dependency (where a non-key attribute depends on only part of the primary key).
- * - Applicable only for tables with composite primary keys.
+ * Second Normal Form (2NF)
+ * - A table is in 2NF if it is in 1NF and all non-key attributes are fully dependent on the entire primary key.
+ * Note :- No partial dependency: non-key attributes must depend on the composite primary key (if applicable).
  *
  * Example:
- * Incorrect 2NF table (partial dependency):
+ * Incorrect Table (violates 2NF):
+ * | StudentID | Course     | InstructorName |
+ * |-----------|------------|----------------|
+ * | 1         | Math       | Mr. Smith      |
+ * | 1         | Science    | Mrs. Johnson   |
  *
- * | studentID | course    | instructor    |
- * |-----------|-----------|---------------|
- * | 1         | Math      | Mr. Smith     |
- * | 1         | Science   | Mrs. Johnson  |
- * | 2         | History   | Mr. Green     |
+ * Issue: InstructorName depends only on Course, not on the composite key {StudentID, Course}.
  *
- * Corrected 2NF tables:
+ * Correct Tables (normalized to 2NF):
+ * Students_Courses:
+ * | StudentID | Course     |
+ * |-----------|------------|
+ * | 1         | Math       |
+ * | 1         | Science    |
  *
- * **students**:
- * | studentID | studentName |
- * |-----------|-------------|
- * | 1         | John        |
- * | 2         | Jane        |
- *
- * **courses**:
- * | course    | instructor    |
- * |-----------|---------------|
- * | Math      | Mr. Smith     |
- * | Science   | Mrs. Johnson  |
- * | History   | Mr. Green     |
- *
- * SQL Table Creation for 2NF:
- * ```sql
- * CREATE TABLE students (
- *     studentID INT PRIMARY KEY,
- *     studentName VARCHAR(100)
- * );
- * CREATE TABLE courses (
- *     course VARCHAR(100) PRIMARY KEY,
- *     instructor VARCHAR(100)
- * );
- * CREATE TABLE student_courses (
- *     studentID INT,
- *     course VARCHAR(100),
- *     FOREIGN KEY (studentID) REFERENCES students(studentID),
- *     FOREIGN KEY (course) REFERENCES courses(course)
- * );
- * ```
+ * Courses:
+ * | Course     | InstructorName |
+ * |------------|----------------|
+ * | Math       | Mr. Smith      |
+ * | Science    | Mrs. Johnson   |
  */
 
 /**
- * 3. Third Normal Form (3NF)
- * - A table is in 3NF if it is in 2NF and all non-key attributes are not transitively dependent on the primary key.
- * - Eliminate transitive dependency (where non-key attributes depend on other non-key attributes).
+ * Third Normal Form (3NF)
+ * - A table is in 3NF if it is in 2NF and there are no transitive dependencies.
+ * - Each non-key attribute in the table must be dependent on the entire primary key.
+ * - Non-key attributes must depend only on the primary key.
+ *
+ * Note :- Each non-key attribute in the table must depend on the key, the whole key, and nothing but the key.
  *
  * Example:
- * Incorrect 3NF table (transitive dependency):
+ * Incorrect Table (violates 3NF):
+ * | StudentID | Course     | InstructorName | InstructorPhone |
+ * |-----------|------------|----------------|-----------------|
+ * | 1         | Math       | Mr. Smith      | 123-456-7890    |
  *
- * | studentID | course    | instructor    | instructorPhone |
- * |-----------|-----------|---------------|-----------------|
- * | 1         | Math      | Mr. Smith     | 123-456-7890    |
- * | 1         | Science   | Mrs. Johnson  | 987-654-3210    |
- * | 2         | History   | Mr. Green     | 555-123-4567    |
+ * Issue: InstructorPhone depends on InstructorName, not directly on StudentID.
  *
- * Corrected 3NF tables:
+ * Correct Tables (normalized to 3NF):
+ * Students_Courses:
+ * | StudentID | Course     |
+ * |-----------|------------|
+ * | 1         | Math       |
  *
- * **students**:
- * | studentID | studentName |
- * |-----------|-------------|
- * | 1         | John        |
- * | 2         | Jane        |
+ * Courses:
+ * | Course     | InstructorName |
+ * |------------|----------------|
+ * | Math       | Mr. Smith      |
  *
- * **courses**:
- * | course    | instructor    |
- * |-----------|---------------|
- * | Math      | Mr. Smith     |
- * | Science   | Mrs. Johnson  |
- * | History   | Mr. Green     |
- *
- * **instructors**:
- * | instructor    | instructorPhone |
- * |---------------|-----------------|
- * | Mr. Smith     | 123-456-7890    |
- * | Mrs. Johnson  | 987-654-3210    |
- * | Mr. Green     | 555-123-4567    |
- *
- * SQL Table Creation for 3NF:
- * ```sql
- * CREATE TABLE students (
- *     studentID INT PRIMARY KEY,
- *     studentName VARCHAR(100)
- * );
- * CREATE TABLE courses (
- *     course VARCHAR(100) PRIMARY KEY,
- *     instructor VARCHAR(100)
- * );
- * CREATE TABLE instructors (
- *     instructor VARCHAR(100) PRIMARY KEY,
- *     instructorPhone VARCHAR(15)
- * );
- * CREATE TABLE student_courses (
- *     studentID INT,
- *     course VARCHAR(100),
- *     FOREIGN KEY (studentID) REFERENCES students(studentID),
- *     FOREIGN KEY (course) REFERENCES courses(course)
- * );
- * CREATE TABLE instructor_phone (
- *     instructor VARCHAR(100),
- *     instructorPhone VARCHAR(15),
- *     FOREIGN KEY (instructor) REFERENCES instructors(instructor)
- * );
- * ```
+ * Instructors:
+ * | InstructorName | InstructorPhone |
+ * |----------------|-----------------|
+ * | Mr. Smith      | 123-456-7890    |
  */
 
 /**
- * 4. Boyce-Codd Normal Form (BCNF)
- * - A table is in BCNF if it is in 3NF and for every non-trivial functional dependency, the left-hand side is a superkey.
- * - In simpler terms, every determinant must be a candidate key.
+ * Boyce-Codd Normal Form (BCNF)
+ * - A table is in BCNF if it is in 3NF and every determinant is a candidate key.
+ * - Eliminates situations where a non-prime attribute determines part of the key.
+ * Note :- Each attribute in the table must depend on the key, the whole key, and nothing but the key.
  *
  * Example:
- * A table might be in 3NF but not BCNF if a non-prime attribute determines another non-prime attribute.
- * BCNF addresses this issue by ensuring that each determinant is a key.
+ * Incorrect Table (violates BCNF):
+ * | StudentID | Course     | InstructorName |
+ * |-----------|------------|----------------|
+ * | 1         | Math       | Mr. Smith      |
+ * | 2         | Science    | Mr. Smith      |
+ *
+ * Issue: InstructorName determines Course but is not a key.
+ *
+ * Correct Tables (normalized to BCNF):
+ * Students_Courses:
+ * | StudentID | Course     |
+ * |-----------|------------|
+ * | 1         | Math       |
+ * | 2         | Science    |
+ *
+ * Instructors_Courses:
+ * | Course     | InstructorName |
+ * |------------|----------------|
+ * | Math       | Mr. Smith      |
+ * | Science    | Mr. Smith      |
  */
 
 /**
- * 5. Fourth Normal Form (4NF)
- * - A table is in 4NF if it is in BCNF and there are no multi-valued dependencies.
- * - Multi-valued dependencies occur when one column contains multiple values that should be stored separately.
+ * Fourth Normal Form (4NF)
+ * - A table is in 4NF if it is in BCNF and has no multivalued dependencies.
+ * - Multivalued attributes must be decomposed into separate tables.
+ * Note :- The only kinds of multivalued dependency allowed in a table are multivalued dependencies on the key.
  *
  * Example:
- * A table storing multiple phone numbers for each student in a single column violates 4NF.
- * To fix this, create a separate table for phone numbers.
+ * Incorrect Table (violates 4NF):
+ * | Model     | Color   | Style      |
+ * |-----------|---------|------------|
+ * | Prairie   | Brown   | Bungalow   |
+ * | Prairie   | Green   | Schoolhouse|
+ *
+ * Correct Tables (normalized to 4NF):
+ * Model_Colors:
+ * | Model     | Color   |
+ * |-----------|---------|
+ * | Prairie   | Brown   |
+ * | Prairie   | Green   |
+ *
+ * Model_Styles:
+ * | Model     | Style      |
+ * |-----------|------------|
+ * | Prairie   | Bungalow   |
+ * | Prairie   | Schoolhouse|
  */
 
 /**
- * 6. Fifth Normal Form (5NF)
- * - A table is in 5NF if it is in 4NF and all join dependencies are implied by candidate keys.
- * - 5NF ensures that no information is lost when the table is decomposed into smaller tables.
- */
-
-/**
- * Benefits of Data Normalization:
- * - Reduces data redundancy and improves data integrity.
- * - Minimizes update anomalies (e.g., inconsistent data when updating).
- * - Simplifies data maintenance by separating different concerns into related tables.
- * - Optimizes storage by removing unnecessary duplicated data.
- */
-
-/**
- * Summary:
- * - Data normalization in SQL aims to structure a database to reduce redundancy and dependency.
- * - It progresses through several stages: 1NF, 2NF, 3NF, BCNF, 4NF, and 5NF.
- * - Normalization improves data integrity, consistency, and overall performance.
+ * Fifth Normal Form (5NF)
+ * - A table is in 5NF if it is in 4NF and cannot be decomposed further without losing data.
+ * - Ensures all join dependencies are preserved.
+ *Note :- It must not be possible to describe the table as being the logical result of joining some other tables together.
+ * Example:
+ * Preferred_Brands_By_Person:
+ * | Person | Brand     |
+ * |--------|-----------|
+ * | Jason  | Frosty's  |
+ * | Suzy   | Alpine    |
+ *
+ * Preferred_Flavors_By_Person:
+ * | Person | Flavor          |
+ * |--------|-----------------|
+ * | Jason  | Vanilla         |
+ * | Suzy   | Strawberry      |
+ *
+ * Available_Flavors_By_Brand:
+ * | Brand     | Flavor          |
+ * |-----------|-----------------|
+ * | Frosty's  | Vanilla         |
+ * | Alpine    | Strawberry      |
+ *
+ * Join query to get final preferences:
+ * SELECT
+ *     pbrand.Person, bf.Brand, bf.Flavor
+ * FROM
+ *     Preferred_Brands_By_Person pbrand
+ * INNER JOIN
+ *     Preferred_Flavors_By_Person pflavor ON pbrand.Person = pflavor.Person
+ * INNER JOIN
+ *     Available_Flavors_By_Brand bf ON pbrand.Brand = bf.Brand AND pflavor.Flavor = bf.Flavor;
  */

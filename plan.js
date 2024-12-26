@@ -2,8 +2,8 @@
 // | Topic                  | Number of Weeks |
 // ---------------------------------------------
 // | SQL                    | 3 weeks         |
-// | Node JS                | 4 weeks         |
 // | Regex                  | 1 week          |
+// | Node JS                | 4 weeks         |
 // | Docker and Kubernetes  | 2 weeks         |
 // | Python                 | 11 weeks        |
 // | Django                 | 2 weeks         |

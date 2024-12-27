@@ -1,7 +1,10 @@
 // ---------------------------------------------
 // | Topic                  | Number of Weeks |
 // ---------------------------------------------
-// | Docker and Kubernetes  | 2 weeks         |
+// | Docker                 | 1 week          |
+// | Grapqh QL              | 2 weeks         |
+// | Nest JS                | 3 weeks        |
+// | Kubernetes             | 1 week          |
 // | SQL                    | 3 weeks         |
 // | Regex                  | 1 week          |
 // | Node JS                | 4 weeks         |

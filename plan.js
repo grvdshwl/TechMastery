@@ -6,6 +6,7 @@
 // | Kubernetes             | 1 week          |
 // | SQL                    | 3 weeks         |
 // | Regex                  | 1 week          |
+// | Nginx                  | 1 week          |
 // | Node JS                | 4 weeks         |
 // | Nest JS                | 3 weeks         |
 // | Python                 | 11 weeks        |

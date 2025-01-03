@@ -1,122 +1,63 @@
-// Classes and Objects Example
-class Car {
-  constructor(brand, model) {
-    this.brand = brand; // Public field
-    this.model = model; // Public field
-  }
+// In JavaScript, we can define properties and methods with different access levels:
 
-  displayInfo() {
-    console.log(`Car: ${this.brand} ${this.model}`);
-  }
-}
-const car1 = new Car("Toyota", "Corolla");
-car1.displayInfo(); // Output: Car: Toyota Corolla
+class Person {
+  // Public property: 'name' is public by default.
+  // It can be accessed from anywhere, both inside and outside the class.
+  name;
 
-// Constructor and Destructor Example
-class User {
+  // Private property: private fields use '#' symbol in modern JS.
+  // This means 'name' can only be accessed inside the class, not from outside.
+  #privateName;
+
+  // Constructor to initialize the properties
   constructor(name) {
-    this.name = name;
-    console.log(`${this.name} has been created`);
+    this.name = name; // Public: Accessible from outside
+    this.#privateName = name; // Private: Accessible only within this class
   }
 
-  destroy() {
-    // Simulated destructor
-    console.log(`${this.name} has been destroyed`);
+  // Public method: Can be accessed from outside the class
+  greet() {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+
+  // Private method: This is only accessible within the class
+  #privateGreet() {
+    console.log(`Hello from private method, my name is ${this.#privateName}`);
+  }
+
+  // Method that demonstrates calling the private method inside the class
+  showPrivateGreeting() {
+    this.#privateGreet(); // Valid, since it's within the class
   }
 }
-const user = new User("Alice"); // Output: Alice has been created
-user.destroy(); // Output: Alice has been destroyed
 
-// Access Modifiers Example
-class Account {
-  #balance = 0; // Private field
+// Public access:
+const person = new Person("Alice");
+console.log(person.name); // 'name' is public, can be accessed outside the class
+person.greet(); // Public method, can be called from outside
 
-  constructor(owner) {
-    this.owner = owner; // Public field
+// Private access:
+// console.log(person.#privateName);  // Error: Private field '#privateName' must be declared in an enclosing class
+// person.#privateGreet();  // Error: Private method '#privateGreet' is not accessible outside the class
+
+// Protected (simulated in JS):
+// JavaScript doesn't have a native 'protected' access modifier.
+// We can simulate protected members by using the '_' naming convention, but it still won't be enforced.
+class Student extends Person {
+  constructor(name, grade) {
+    super(name);
+    this._grade = grade; // Simulating protected using '_', it’s convention-based and not enforced
   }
 
-  deposit(amount) {
-    this.#balance += amount;
-    console.log(`${this.owner} deposited $${amount}`);
-  }
-
-  getBalance() {
-    return this.#balance;
-  }
-}
-const acc = new Account("John");
-acc.deposit(100); // Output: John deposited $100
-console.log(acc.getBalance()); // Output: 100
-
-// Static Members Example
-class Calculator {
-  static add(a, b) {
-    return a + b;
+  // Access protected field '_grade' inside subclass
+  displayGrade() {
+    console.log(`Grade: ${this._grade}`);
   }
 }
-console.log(Calculator.add(5, 3)); // Output: 8
 
-// Inner/Nested Classes Example
-class OuterClass {
-  constructor(name) {
-    this.name = name;
-  }
+const student = new Student("Bob", "A");
+student.displayGrade(); // Valid: Protected field '_grade' is accessible in subclass
+student.greet(); // Valid: Inherited public method 'greet' is accessible
 
-  displayOuter() {
-    console.log(`Outer class: ${this.name}`);
-  }
-
-  static InnerClass = class {
-    displayInner() {
-      console.log("This is the inner class");
-    }
-  };
-}
-const outer = new OuterClass("OuterObject");
-outer.displayOuter(); // Output: Outer class: OuterObject
-const inner = new OuterClass.InnerClass();
-inner.displayInner(); // Output: This is the inner class
-
-// Abstract Class Example
-class Animal {
-  constructor(name) {
-    if (new.target === Animal) {
-      throw new Error("Cannot instantiate an abstract class");
-    }
-    this.name = name;
-  }
-
-  makeSound() {
-    throw new Error("Method 'makeSound()' must be implemented");
-  }
-}
-class Dog extends Animal {
-  makeSound() {
-    console.log(`${this.name} barks`);
-  }
-}
-const dog = new Dog("Buddy");
-dog.makeSound(); // Output: Buddy barks
-
-// Interface Simulation Example
-class VehicleInterface {
-  startEngine() {
-    throw new Error("Method 'startEngine()' must be implemented");
-  }
-
-  stopEngine() {
-    throw new Error("Method 'stopEngine()' must be implemented");
-  }
-}
-class CarInterface extends VehicleInterface {
-  startEngine() {
-    console.log("Engine started");
-  }
-
-  stopEngine() {
-    console.log("Engine stopped");
-  }
-}
-const carInterface = new CarInterface();
-carInterface.startEngine(); // Output: Engine started
-carInterface.stopEngine(); // Output: Engine stopped
+// The '_grade' field is not truly protected, it is publicly accessible (convention only).
+// console.log(student._grade);  // Accessing '_grade' outside the class (publicly accessible).

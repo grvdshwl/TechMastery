@@ -1,6 +1,7 @@
 // ---------------------------------------------
 // | Topic                  | Number of Weeks |
 // ---------------------------------------------
+// | Nest JS                | 3 weeks         |
 // | Grapqh QL              | 3 weeks         |
 // | Regex                  | 1 week          |
 // | SQL                    | 3 weeks         |
@@ -8,7 +9,6 @@
 // | Docker                 | 2 weeks          |
 // | Kubernetes             | 2 weeks          |
 // | Node JS                | 4 weeks         |
-// | Nest JS                | 3 weeks         |
 // | Python                 | 12 weeks        |
 // | Django                 | 2 weeks         |
 // | Fast APIs              | 2 weeks         |

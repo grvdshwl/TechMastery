@@ -1,0 +1,212 @@
+# Chapter 2 — The Nature of Complexity
+
+## 1. **What This Chapter is About**
+
+The goal of this book is to teach you how to **design software to minimize complexity**.
+
+- First, you need to **understand what complexity is**.
+- Then, you need to learn how to **recognize it** in your code.
+- Finally, you need to know **what causes it** so you can avoid it.
+
+Once you can spot complexity, you can:
+
+- Identify problems early (before spending lots of effort).
+- Compare alternative designs and pick the simpler one.
+- Build a habit of choosing simplicity in your daily programming.
+
+---
+
+## 2. **Defining Complexity**
+
+In this book:
+
+> **Complexity** = Anything in the structure of a software system that makes it **hard to understand** and **hard to modify**.
+
+This means:
+
+- If a system is **easy to understand and modify**, it’s **simple**.
+- If it’s **hard to understand or modify**, it’s **complex**.
+
+**Examples:**
+
+- You can’t figure out how a piece of code works → complexity.
+- It takes hours to make a small change → complexity.
+- Fixing one bug causes another bug → complexity.
+
+---
+
+### 2.1 Complexity is NOT just about size
+
+- **Big system** ≠ complex by default.  
+  If it’s still easy to work on, it’s **not complex**.
+- **Small system** can be complex.  
+  Bad design can make even a small script hard to change.
+
+---
+
+### 2.2 Complexity is about developer experience
+
+- Complexity is **what a developer experiences** when working on code.
+- If **others** think your code is complex, it is complex — even if you find it easy.
+
+---
+
+## 3. **Three Symptoms of Complexity**
+
+### 3.1 **Change Amplification**
+
+> A small change requires changes in many places.
+
+Example:
+
+- Old websites: Each page had its **own banner color setting**.
+- To change the color → You must edit **every page**.
+- Modern fix: Store the banner color in **one central CSS variable**.  
+  Change it once → All pages update automatically.
+
+---
+
+### 3.2 **Cognitive Load**
+
+> How much a developer needs to know to make a change.
+
+Example:
+
+- A C function allocates memory → Caller must remember to free it.
+- If the caller forgets → Memory leak.
+- Solution: Make the function **manage its own memory** so callers don’t need to worry.
+
+High cognitive load comes from:
+
+- APIs with too many methods.
+- Global variables.
+- Inconsistent naming.
+- Hidden dependencies.
+
+---
+
+### 3.3 **Unknown Unknowns**
+
+> You don’t know what you don’t know — and it will break things.
+
+Example:
+
+- Website uses a **central color variable** for banners.
+- But… some pages also use a **hard-coded darker shade** for emphasis.
+- If you change the banner color, you must also change those hard-coded shades.
+- Problem:
+  - Developers may not even **know** those shades exist.
+  - They may **forget** to update them → Visual inconsistencies.
+
+Of these three:
+
+- **Unknown unknowns** are the worst.
+- They cause **hidden bugs** after changes.
+
+---
+
+## 4. **Causes of Complexity**
+
+### 4.1 **Dependencies**
+
+> One piece of code **can’t be understood or changed** without also looking at another.
+
+Examples:
+
+- Two systems (sender & receiver) must **follow the same network protocol**.  
+  Change one → You must change the other.
+- Adding a parameter to a method → Every place calling it must change.
+
+**Good design**:
+
+- Reduce the number of dependencies.
+- Make the remaining ones **obvious and easy to manage**.
+
+---
+
+### 4.2 **Obscurity**
+
+> Important information is **not obvious**.
+
+Examples:
+
+- Variable name `time` → But is it in seconds? milliseconds? hours?
+- A new error code requires adding a message to a hidden lookup table — but no one knows it exists.
+- Same variable name used for two different purposes → Confusing.
+
+**Good design**:
+
+- Clear naming.
+- Clear documentation.
+- Consistent structure.
+
+---
+
+## 5. **Complexity Builds Up Over Time**
+
+- Complexity doesn’t happen overnight.
+- It **accumulates in small chunks**:
+  - A dependency here…
+  - A confusing variable name there…
+- Eventually, it becomes a tangled mess where **every change is risky**.
+
+This is why:
+
+- You must adopt a **“zero tolerance”** policy for unnecessary complexity.
+- Fix small issues before they pile up.
+
+---
+
+## 6. **Summary**
+
+- Complexity = Hard to understand + Hard to modify.
+- It shows up as:
+  1. **Change amplification**
+  2. **High cognitive load**
+  3. **Unknown unknowns**
+- It comes from:
+  - **Dependencies**
+  - **Obscurity**
+- It **accumulates** if ignored.
+- The goal:
+  - **Minimize dependencies**
+  - **Make code obvious**
+
+---
+
+## 7. **Practical Example: Theme Change in a Web App**
+
+**Bad Design (High Complexity):**
+
+```html
+<!-- About page -->
+<div style="background-color: #ffcc00">About Us</div>
+
+<!-- Contact page -->
+<div style="background-color: #ffcc00">Contact</div>
+
+<!-- Home page -->
+<div style="background-color: #ffcc00">Welcome</div>
+```
+
+- Changing the theme color?  
+  → Update every single page manually.
+
+---
+
+**Better Design (Low Complexity):**
+
+```css
+/* styles.css */
+:root {
+  --banner-bg: #ffcc00;
+}
+
+/* use it everywhere */
+.banner {
+  background-color: var(--banner-bg);
+}
+```
+
+- Changing the theme color?  
+  → Update **one CSS variable**.

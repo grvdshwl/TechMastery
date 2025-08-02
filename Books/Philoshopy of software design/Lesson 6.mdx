@@ -1,0 +1,171 @@
+# Chapter 6 — General‑Purpose Modules Are Deeper
+
+## 6.1 Make Classes Somewhat General‑Purpose
+
+When designing a module, you have a choice:
+
+- Build it as a **special‑purpose** component, tailored for exactly how you need it today.
+- Or design it as a **general‑purpose** mechanism, flexible enough for multiple uses in the future.
+
+Special‑purpose code feels quicker to write, but it tends to produce **more methods, tighter coupling, and shallow abstractions**.  
+General‑purpose code can be reused in unexpected ways, and more importantly, it usually produces **simpler, deeper APIs** — even if you never reuse it.
+
+The sweet spot is **“somewhat general‑purpose”**:
+
+- Cover your **current needs** in functionality.
+- Keep the **interface** generic enough to support other plausible uses.
+- Avoid over‑engineering for hypothetical scenarios that may never happen.
+
+---
+
+## 6.2 Example — Text Editing Storage
+
+In a student text‑editor project, each team wrote a class to store and manipulate the file’s text.  
+Many teams tailored the API directly to the visible UI features, adding methods like:
+
+```java
+void backspace(Cursor cursor);
+void delete(Cursor cursor);
+void deleteSelection(Selection selection);
+```
+
+These methods **mirrored UI actions** rather than **abstract text operations**.  
+The result:
+
+- Dozens of **shallow** methods.
+- Tight coupling between **UI logic** and **text storage**.
+- High **cognitive load** — a developer must learn many rarely‑used methods.
+- Any new UI action required **changing the text class**.
+
+### Bad JavaScript‑Style Equivalent
+
+```js
+class TextBuffer {
+  backspace(cursor) {
+    /* remove char before cursor */
+  }
+  delete(cursor) {
+    /* remove char after cursor */
+  }
+  deleteSelection(selection) {
+    /* remove highlighted range */
+  }
+}
+```
+
+- UI‑specific concepts (`cursor`, `selection`) are embedded in the storage layer.
+- Changes in UI behavior require storage‑layer changes.
+- Cannot easily use for anything but this editor.
+
+---
+
+## 6.3 A More General‑Purpose API
+
+Instead, define the text class in **terms of core text operations**:
+
+```java
+void insert(Position position, String text);
+void delete(Position start, Position end);
+Position changePosition(Position position, int numChars);
+```
+
+This removes **UI‑specific abstractions** like `Cursor` and `Selection` from the storage API.  
+Higher‑level code implements UI actions in terms of these primitives.
+
+### Better JavaScript‑Style Equivalent
+
+```js
+class TextBuffer {
+  insert(position, text) {
+    /* insert text */
+  }
+  delete(start, end) {
+    /* delete range */
+  }
+  changePosition(position, offset) {
+    /* move position */
+  }
+}
+```
+
+**UI “Backspace” Implementation:**
+
+```js
+buffer.delete(buffer.changePosition(cursor, -1), cursor);
+```
+
+**UI “Delete” Implementation:**
+
+```js
+buffer.delete(cursor, buffer.changePosition(cursor, 1));
+```
+
+- The storage layer is **UI‑agnostic**.
+- The same methods can implement many operations — delete, backspace, cut, replace — without adding new storage methods.
+- Fewer methods → deeper API.
+
+### Why It’s Better
+
+- **Cleaner separation**: UI code depends only on a few primitives.
+- **Lower cognitive load**: Fewer, deeper methods to learn.
+- **Easier to reuse**: Can use `TextBuffer` in other tools (e.g., batch text replacers).
+
+---
+
+## 6.4 Generality Improves Information Hiding
+
+With the **general‑purpose API**:
+
+- The storage class no longer cares about which keys the user pressed.
+- UI developers can add new features **without touching storage code**.
+- The number of storage‑layer methods drops dramatically.
+
+Special‑purpose APIs tend to **leak information** between layers.  
+Generality creates a **clear boundary** and hides irrelevant details.
+
+### Bad Example — False Abstraction
+
+```js
+class TextBuffer {
+  backspace(cursor) {
+    /* remove char before cursor */
+  }
+}
+```
+
+This looks like an abstraction, but UI developers still need to know **exactly** what it does.  
+They’ll check the implementation anyway → wasted indirection.
+
+---
+
+## 6.5 Questions to Ask
+
+To strike the right balance:
+
+1. **What’s the simplest API that covers all my current needs?**  
+   If you can replace several special‑purpose methods with one general‑purpose method, do it.
+2. **How many contexts will use this method?**  
+   If the answer is “just one,” it might be too special‑purpose.
+3. **Is it easy to use now?**  
+   Don’t make it so general‑purpose that everyday use becomes clumsy or verbose.
+
+Avoid extremes:
+
+- **Too special‑purpose** → many shallow methods, tightly coupled layers.
+- **Too general‑purpose** → verbose, hard‑to‑use interfaces for simple tasks.
+
+---
+
+## 6.6 Summary
+
+General‑purpose APIs:
+
+- Tend to be **simpler and deeper**.
+- Hide more information between layers.
+- Make modules more reusable — even if reuse never happens.
+- Reduce coupling and duplication.
+
+**Guideline:**
+
+> Implement for **current needs** in functionality,  
+> but keep the **interface generic** so it’s useful in other reasonable scenarios.

@@ -1,4 +1,20 @@
 /* 
+
+============================================================
+📌 Fundamentals & Core CS (Learning Order)
+============================================================
+
+1. Data Structures and Algorithms  - Cracking the code interview , Groking Systme design
+2. Computer Science Fundamentals 
+3. Networking
+4. Operating Systems
+5. Security Fundamentals (OWASP Top 10, XSS, CSRF, SQL Injection, AuthN/AuthZ)
+6. Git
+7. Clean Coding & Software Design
+8. Low-Level Design (LLD)
+9. High-Level Design (HLD) - System Design
+
+
 ============================================================
 📌 JavaScript Core (Learning Order)
 ============================================================
@@ -7,20 +23,6 @@
 3. Machine Coding - JS Live Coding Apps & React
 
 
-/*
-============================================================
-📌 Fundamentals & Core CS (Learning Order)
-============================================================
-
-1. Computer Science Fundamentals
-2. Data Structures and Algorithms
-3. Networking
-4. Operating Systems
-5. Security Fundamentals (OWASP Top 10, XSS, CSRF, SQL Injection, AuthN/AuthZ)
-6. Git
-7. Clean Coding & Software Design
-8. Low-Level Design (LLD)
-9. High-Level Design (HLD) - System Design
 
 
 

@@ -1,0 +1,162 @@
+# Chapter 20: Designing for Performance
+
+## Description
+
+This chapter explores how to design software that is both high-performing and simple, emphasizing that simplicity often leads to faster systems. It discusses balancing performance considerations during development, avoiding premature optimization, and focusing on naturally efficient designs. The chapter provides strategies for performance optimization, such as measuring before modifying and designing around the critical path, using the RAMCloud `Buffer` class as a case study. Real code examples illustrate how to achieve speed without sacrificing clean design.
+
+## 20.1 How to Think About Performance
+
+- **Balancing Performance and Simplicity**: Obsessing over performance for every line of code adds complexity and slows development, but ignoring performance can lead to a system 5–10x slower than necessary.
+- **Approach**: Choose "naturally efficient" designs that are simple and leverage basic performance knowledge.
+- **Expensive Operations** (relative to CPU instructions):
+  - **Network Communication**: 10–50 µs (datacenter) or 10–100 ms (wide-area), thousands to millions of instruction times.
+  - **Disk I/O**: 5–10 ms (millions of instructions); flash storage: 10–100 µs; nonvolatile memory: ~1 µs (~2000 instructions).
+  - **Dynamic Memory Allocation**: Significant overhead for allocation, freeing, and garbage collection.
+  - **Cache Misses**: Fetching from DRAM takes hundreds of instruction times, often dominating performance.
+- **Learning Costs**: Use micro-benchmarks to measure operation costs.
+  - **Example**: RAMCloud’s micro-benchmark framework allowed quick performance tests, e.g., comparing library functions or new classes.
+- **Choosing Efficient Designs**:
+  - **Example (Hash Table vs. Ordered Map)**:
+    ```java
+    // Slower: Ordered map for key-value lookups
+    Map<String, String> data = new TreeMap<>();
+    ```
+    ```java
+    // Faster: Hash table for key-value lookups
+    Map<String, String> data = new HashMap<>();
+    ```
+    Hash tables are 5–10x faster and equally simple to use.
+  - **Example (Array Allocation in C)**:
+    ```c
+    // Slower: Array of pointers with separate allocations
+    struct Data* array = malloc(numItems * sizeof(struct Data*));
+    for (int i = 0; i < numItems; i++) {
+        array[i] = malloc(sizeof(struct Data));
+    }
+    ```
+    ```c
+    // Faster: Single block allocation
+    struct Data* array = malloc(numItems * sizeof(struct Data));
+    ```
+    One allocation reduces overhead significantly.
+- **Trade-offs**: If efficiency adds complexity, weigh the impact. Hidden complexity (not affecting interfaces) may be acceptable; complex interfaces or significant implementation complexity may not be worth it unless performance is critical.
+  - **Example**: RAMCloud used special hardware to bypass kernel networking for low latency, accepting complexity because measurements confirmed its necessity.
+
+## 20.2 Measure Before Modifying
+
+- **Avoid Intuition-Based Tweaks**: Programmers’ performance intuitions are often wrong, leading to wasted effort and added complexity.
+- **Strategy**: Measure system performance to identify bottlenecks and establish a baseline for improvements.
+  - **Top-Level Measurement**: Identifies if the system is slow but not why.
+  - **Detailed Measurement**: Pinpoints specific code sections consuming time.
+  - **Baseline**: Allows verification of performance gains post-optimization.
+- **Example**:
+  ```java
+  // Before optimization: Measure time spent in method
+  long start = System.nanoTime();
+  processData(data);
+  long elapsed = System.nanoTime() - start;
+  System.out.println("Processing time: " + elapsed + " ns");
+  ```
+  Identifies if `processData` is a bottleneck; revert changes if no improvement.
+
+## 20.3 Design Around the Critical Path
+
+- **Definition**: The critical path is the minimal code executed in the most common case for a task.
+- **Strategy**: Redesign code to minimize critical path execution, isolating special cases.
+  - **Step 1**: Imagine the simplest code for the common case, ignoring existing structure.
+  - **Step 2**: Design a clean system that closely matches this "ideal" code, applying principles like abstraction and simplicity.
+  - **Step 3**: Handle special cases outside the critical path with a single check.
+- **Example**:
+  ```java
+  // Original: Multiple checks on critical path
+  public void processItem(Item item) {
+      if (item != null) {
+          if (item.isValid()) {
+              if (cache.contains(item)) {
+                  cache.update(item);
+              } else {
+                  processNewItem(item);
+              }
+          }
+      }
+  }
+  ```
+  ```java
+  // Optimized: Single check for special cases
+  public void processItem(Item item) {
+      if (item == null || !item.isValid() || !cache.contains(item)) {
+          handleSpecialCases(item);
+          return;
+      }
+      cache.update(item); // Critical path
+  }
+  ```
+  Reduces checks in the common case, improving speed and clarity.
+
+## 20.4 An Example: RAMCloud Buffers
+
+- **Context**: RAMCloud’s `Buffer` class manages variable-length memory arrays (e.g., for RPC messages) to minimize memory copies and allocation overhead.
+  - **Structure**: Buffers store data in discontiguous chunks (internal: owned by Buffer; external: owned by caller).
+  - **Use Case**: A response message combines a small header (internal chunk) and a large object (external chunk), avoiding copying the object.
+  - **Example**:
+    ```c
+    Buffer response;
+    // Internal chunk for header
+    char* header = response.alloc(32); // Small allocation
+    strcpy(header, "Response Header");
+    // External chunk for large object
+    response.appendExternal(objectData, objectSize);
+    ```
+    Avoids copying `objectData`, reducing overhead.
+- **Optimization Goal**: Speed up the common case of allocating small internal chunks (e.g., headers).
+- **Original Code Issues** (Critical Path: `Buffer::alloc`):
+  - Multiple special-case checks (e.g., allocation existence, space availability).
+  - Shallow layers (`Buffer::alloc` → `Buffer::allocateAppend` → `Buffer::Allocation::allocateAppend`).
+  - Unnecessary checks and allocations, increasing critical path complexity.
+  - **Example (Simplified Original)**:
+    ```c
+    void* Buffer::alloc(size_t numBytes) {
+        void* result = allocateAppend(numBytes);
+        if (result) return result; // Check 1
+        // Allocate new space
+        return createNewAllocation(numBytes);
+    }
+    void* Buffer::allocateAppend(size_t numBytes) {
+        if (!currentAllocation) return nullptr; // Check 2
+        void* result = currentAllocation->allocateAppend(numBytes);
+        if (!result) return nullptr; // Check 3
+        return result;
+    }
+    ```
+    Multiple checks and layers slow down the critical path.
+- **Refactored Code**:
+  - **Goal**: Minimize critical path with one check for special cases.
+  - **New Variable**: `extraAppendBytes` tracks unused space after the last chunk, simplifying allocation.
+  - **Example**:
+    ```c
+    /*
+     * Allocates space for numBytes in an internal chunk, extending the last chunk if possible.
+     */
+    void* Buffer::alloc(size_t numBytes) {
+        uint32_t numBytes32 = (numBytes + 7) & ~0x7; // Align to 8 bytes
+        if (extraAppendBytes >= numBytes32) { // Single check
+            extraAppendBytes -= numBytes32;
+            totalLength += numBytes32;
+            return lastChunk->data + lastChunk->length + extraAppendBytes;
+        }
+        // Handle special cases (e.g., no chunks, last chunk not internal)
+        return handleSpecialCaseAllocation(numBytes32);
+    }
+    ```
+    Single method, one check, and direct allocation in the common case.
+- **Results**:
+  - Reduced code size by 20% (1476 vs. 1886 lines).
+  - Doubled performance for appending a 1-byte string (8.8 ns to 4.75 ns).
+  - Improved other operations (e.g., construct-append-destroy: 24 ns to 12 ns).
+- **Trade-off**: Added `extraAppendBytes` to simplify allocation but kept `totalLength` updates to optimize length retrieval, balancing performance across common operations.
+
+## Conclusion
+
+- **Key Principle**: Simplicity drives both clean design and performance; deep classes and fewer special cases reduce overhead.
+- **Approach**: Use performance knowledge to choose efficient designs, measure before optimizing, and redesign around the critical path.
+- **Outcome**: Clean, fast code is achievable by aligning performance goals with design principles, as demonstrated in the RAMCloud `Buffer` optimization.

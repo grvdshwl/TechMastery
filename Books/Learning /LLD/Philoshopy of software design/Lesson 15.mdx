@@ -1,0 +1,191 @@
+# Chapter 15: Write The Comments First (Use Comments As Part Of The Design Process)
+
+## Description
+
+This chapter advocates writing comments at the start of the development process, integrating them into the design phase rather than delaying until coding and testing are complete. Writing comments first produces better documentation, improves system design by refining abstractions, and makes the process more enjoyable. The chapter addresses objections to early commenting, such as the effort to revise comments as code evolves, and provides real code examples to illustrate the approach.
+
+## 15.1 Delayed Comments Are Bad Comments
+
+- **Common Practice**: Developers often delay writing comments until after coding and testing, citing code instability as a reason.
+  - **Excuse**: Early comments may need rewriting if code changes, so developers wait for code to stabilize.
+  - **Underlying Issue**: Documentation is seen as tedious, leading to procrastination.
+- **Negative Consequences**:
+  - **No Documentation**: Delaying comments often results in none being written, as the task becomes overwhelming and less appealing over time.
+  - **Poor Quality**: When comments are written late, developers are mentally disengaged, rushing to add minimal comments that repeat code or miss key design details.
+  - **Memory Fade**: After time, design rationale is forgotten, leading to incomplete or inaccurate comments.
+- **Example**:
+  - **Poor (Delayed Comment)**:
+    ```java
+    // Get user data
+    public User getUser(String id) { ... }
+    ```
+    Written late, this vague comment repeats the method name and omits critical details.
+  - **Better (Early Comment)**:
+    ```java
+    /*
+     * Retrieves user profile data by ID from the database.
+     * @param id The unique identifier of the user.
+     * @return The User object, or null if no user exists with the given ID.
+     * @throws DatabaseException If the database query fails.
+     */
+    public User getUser(String id) { ... }
+    ```
+    Written early, this captures the method’s purpose and edge cases clearly.
+
+## 15.2 Write the Comments First
+
+- **Approach**:
+  - Start with the class interface comment to define its abstraction.
+  - Write interface comments and signatures for key public methods, leaving bodies empty.
+  - Iterate on comments to refine the class structure.
+  - Add declarations and comments for major instance variables.
+  - Fill in method bodies, adding implementation comments as needed.
+  - Write interface comments for new methods and variables before their code.
+- **Benefits**:
+  - Comments are complete when coding finishes, avoiding a backlog.
+  - Design issues are fresh, making it easier to document key abstractions.
+  - Comments improve during coding and testing as issues are identified and fixed.
+- **Example**:
+  - **Class Comment First**:
+    ```java
+    /*
+     * Manages a thread-safe queue for processing asynchronous tasks in FIFO order.
+     */
+    public class TaskQueue {
+        // Instance variables and methods to follow
+    }
+    ```
+    Written first, this comment guides the class design.
+  - **Method Comment First**:
+    ```java
+    /*
+     * Adds a task to the end of the queue.
+     * @param task The task to enqueue.
+     * @throws IllegalArgumentException If task is null.
+     */
+    public void enqueue(Task task) {
+        // Implementation to be filled in
+    }
+    ```
+    Writing the comment first clarifies the method’s role before coding.
+
+## 15.3 Comments Are a Design Tool
+
+- **Role in Design**: Writing comments first forces developers to articulate abstractions early, improving system design.
+- **Identifying Essence**: Comments require identifying the most important aspects of a variable or method, refining the abstraction.
+- **Red Flag: Hard to Describe**: If a comment is long or complex, it indicates a poor abstraction.
+  - **Poor Example**:
+    ```java
+    /*
+     * This variable holds the current state of the system, including user data, settings, and temporary flags.
+     */
+    private Object systemState;
+    ```
+    A complex comment suggests `systemState` is poorly defined and needs refactoring.
+  - **Better Example**:
+    ```java
+    /*
+     * Tracks the current user’s session ID, or null if no user is logged in.
+     */
+    private String sessionId;
+    ```
+    A simple, complete comment indicates a clear abstraction.
+- **Depth Indicator**: Compare interface comments to implementation; short, clear interface comments with complex implementations suggest deep classes/methods.
+- **Example**:
+  - **Shallow Method**:
+    ```java
+    /*
+     * Increments the counter by 1 and logs the new value.
+     */
+    public void incrementCounter() {
+        counter++;
+        log.info("Counter: " + counter);
+    }
+    ```
+    The comment mirrors the implementation, indicating a shallow method.
+  - **Deep Method**:
+    ```java
+    /*
+     * Processes incoming network requests and dispatches them to the appropriate handler.
+     */
+    public void processRequests() {
+        // Complex logic involving buffers, threads, and handlers
+    }
+    ```
+    A simple comment for complex code indicates a deep abstraction.
+
+## 15.4 Early Comments Are Fun Comments
+
+- **Enjoyment in Design**: Writing comments during the design phase is engaging, as it involves fleshing out abstractions and testing design quality.
+- **Pride in Simplicity**: Simple, clear comments reflect a good design, making the process rewarding.
+- **Strategic Programming**: Focusing on great design (not just working code) makes comment-writing a key part of creating elegant solutions.
+- **Example**:
+  - **Design Phase Comment**:
+    ```java
+    /*
+     * Represents a cache for storing user profiles to reduce database queries.
+     */
+    public class UserCache {
+        // Structure to be refined based on comment
+    }
+    ```
+    Writing this early helps shape a clean cache design and feels satisfying when the comment is concise.
+
+## 15.5 Are Early Comments Expensive?
+
+- **Objection**: Writing comments early requires rework if code changes.
+- **Counterargument**:
+  - Commenting is a small fraction (~5%) of development time, as coding/comments combined are ~10% of total effort.
+  - Early comments stabilize abstractions, reducing code revisions compared to code-first approaches.
+  - Overall, writing comments first may save time by improving design efficiency.
+- **Example**:
+  - **Code-First (More Rework)**:
+    ```java
+    public void processData(String input) {
+        // Implementation evolves, requiring multiple code revisions
+    }
+    // Later: Add vague comment
+    // Process input data
+    ```
+    Unstable abstractions lead to code churn.
+  - **Comment-First (Stable Design)**:
+    ```java
+    /*
+     * Parses input string into a structured data object for further processing.
+     */
+    public void processData(String input) {
+        // Implementation follows stable comment
+    }
+    ```
+    Early comment guides a focused implementation.
+
+## 15.6 Conclusion
+
+- **Recommendation**: Try writing comments first to integrate documentation into the design process.
+- **Benefits**: Improves comment quality, enhances system design, and makes documentation enjoyable.
+- **Experiment**: Test the approach, assess its impact on comment quality, design, and development enjoyment, and refine based on experience.
+- **Example**:
+
+  - **Complete Class Example**:
+
+    ```java
+    /*
+     * Manages a connection pool for database access, ensuring efficient reuse of connections.
+     */
+    public class ConnectionPool {
+        /*
+         * Maximum number of active connections allowed in the pool.
+         */
+        private static final int MAX_CONNECTIONS = 10;
+
+        /*
+         * Acquires a database connection from the pool, or waits if none are available.
+         * @return A free connection, or null if the pool is exhausted.
+         */
+        public Connection acquireConnection() {
+            // Implementation to follow
+        }
+    }
+    ```
+
+    Comments written first guide the design and ensure clarity.

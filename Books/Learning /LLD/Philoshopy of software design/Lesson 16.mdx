@@ -1,0 +1,228 @@
+# Chapter 16: Modifying Existing Code
+
+## Description
+
+This chapter discusses strategies for maintaining a clean system design when modifying existing code, emphasizing a strategic approach over tactical quick fixes. It highlights the iterative nature of software development, where design evolves through incremental changes. The chapter provides techniques to prevent complexity creep, focusing on maintaining up-to-date comments and avoiding duplication. Real code examples illustrate how to keep documentation relevant and effective during code modifications.
+
+## 16.1 Stay Strategic
+
+- **Tactical vs. Strategic Programming**: Tactical programming prioritizes quick functionality, adding complexity; strategic programming focuses on clean design.
+- **Common Pitfall**: Developers often make minimal changes for bug fixes or features to avoid risks, but this introduces special cases and dependencies.
+- **Strategic Approach**: Aim for a system design as if the change was part of the original plan, refactoring if necessary to maintain simplicity.
+  - **Tactical Example**:
+    ```java
+    // Quick fix: Add special case for null input
+    if (input == null) {
+        return defaultValue;
+    }
+    processInput(input);
+    ```
+    Adds complexity without improving design.
+  - **Strategic Example**:
+    ```java
+    /*
+     * Processes input data, handling null by returning a default value.
+     */
+    public Result processInput(String input) {
+        if (input == null) {
+            return defaultValue;
+        }
+        // Refactored logic for cleaner handling
+        return computeResult(input);
+    }
+    ```
+    Refactors to integrate the change cleanly.
+- **Investment Mindset**: Invest time in refactoring to improve design, recouping effort through faster future development (see Chapter 3).
+- **Practical Considerations**: If refactoring is too costly (e.g., three months vs. two hours), seek compromises like partial refactoring or scheduling future cleanup.
+- **Goal**: Every modification should improve or at least maintain the system’s design quality.
+
+## 16.2 Maintaining Comments: Keep the Comments Near the Code
+
+- **Challenge**: Code changes can invalidate comments, leading to inaccurate documentation if not updated.
+- **Solution**: Place comments close to the code they describe to ensure developers see and update them during modifications.
+  - **Poor Example** (Comment in header file):
+    ```c
+    // In header.h
+    /*
+     * Reads data from buffer.
+     */
+    void readBuffer(Buffer* buffer);
+    ```
+    ```c
+    // In source.c
+    void readBuffer(Buffer* buffer) {
+        // Changes here may not prompt header comment update
+    }
+    ```
+    Far from code, the comment may be overlooked.
+  - **Better Example** (Comment in source file):
+    ```c
+    /*
+     * Reads data from the specified buffer, advancing the read pointer.
+     * @param buffer The buffer to read from.
+     */
+    void readBuffer(Buffer* buffer) {
+        // Changes here prompt comment review
+    }
+    ```
+    Proximity ensures updates during code changes.
+- **Implementation Comments**: Spread comments within methods at the narrowest relevant scope.
+  - **Poor Example**:
+    ```java
+    /*
+     * Phase 1: Validate input. Phase 2: Process data. Phase 3: Save result.
+     */
+    public void processData(String input) {
+        validateInput(input);
+        Data data = computeData(input);
+        saveResult(data);
+    }
+    ```
+    Single top-level comment is too broad and harder to maintain.
+  - **Better Example**:
+    ```java
+    public void processData(String input) {
+        /*
+         * Phase 1: Validate input to ensure it meets format requirements.
+         */
+        validateInput(input);
+        /*
+         * Phase 2: Compute data based on input.
+         */
+        Data data = computeData(input);
+        /*
+         * Phase 3: Save result to persistent storage.
+         */
+        saveResult(data);
+    }
+    ```
+    Comments at each phase are easier to update.
+- **High-Level Overview**: A brief top-level comment can outline the method’s strategy, with details at each phase.
+
+## 16.3 Comments Belong in the Code, Not the Commit Log
+
+- **Mistake**: Placing critical change details only in commit messages, which are hard to find later.
+- **Solution**: Document design decisions in the code where developers will see them.
+  - **Poor Example**:
+    ```java
+    // Commit message: "Fixed bug #456: Handle null case to avoid crash"
+    if (data == null) {
+        return;
+    }
+    processData(data);
+    ```
+    Bug fix rationale is only in the commit log.
+  - **Better Example**:
+    ```java
+    /*
+     * Handle null data to prevent crashes (fixes bug #456).
+     */
+    if (data == null) {
+        return;
+    }
+    processData(data);
+    ```
+    Documents the fix in the code for future reference.
+- **Principle**: Place documentation where it’s most likely to be seen; commit logs are rarely checked.
+
+## 16.4 Maintaining Comments: Avoid Duplication
+
+- **Challenge**: Duplicated documentation is hard to maintain, as updates may miss some copies.
+- **Solution**: Document each design decision once, in the most obvious location.
+  - **Poor Example**:
+    ```java
+    /*
+     * Cache timeout in seconds; must be positive.
+     */
+    private int cacheTimeout;
+    // Later in code
+    /*
+     * Check cache timeout (in seconds, must be positive).
+     */
+    if (cacheTimeout <= 0) {
+        throw new IllegalStateException();
+    }
+    ```
+    Duplicates timeout details.
+  - **Better Example**:
+    ```java
+    /*
+     * Cache timeout in seconds; must be positive.
+     */
+    private int cacheTimeout;
+    // Later in code
+    if (cacheTimeout <= 0) {
+        throw new IllegalStateException();
+    }
+    ```
+    Documents the timeout only at the declaration.
+- **Centralized Documentation**: Use a `designNotes` file for cross-module decisions (see Section 13.7) or reference a single location.
+  - **Example**:
+    ```java
+    /*
+     * See "CachePolicy" in designNotes for timeout behavior.
+     */
+    if (cacheTimeout <= 0) {
+        throw new IllegalStateException();
+    }
+    ```
+    References centralized documentation.
+- **Avoid Redocumenting**: Don’t repeat external documentation (e.g., HTTP protocol specs) or user manual details in code.
+  - **Example**:
+    ```java
+    /*
+     * Implements the "save" command; see user manual for details.
+     */
+    public void saveCommand() { ... }
+    ```
+    References external manual instead of duplicating.
+
+## 16.5 Maintaining Comments: Check the Diffs
+
+- **Technique**: Before committing changes, review the diff to ensure all code changes are reflected in comments.
+- **Benefits**: Catches outdated comments, leftover debugging code, or unresolved TODOs.
+- **Example**:
+  - **Missed Update**:
+    ```java
+    // Old comment: Timeout is 5 seconds
+    private int timeout = 10; // Changed but comment not updated
+    ```
+    Diff review would catch this mismatch.
+  - **Correct Update**:
+    ```java
+    /*
+     * Timeout in seconds for network requests; increased to 10 for stability.
+     */
+    private int timeout = 10;
+    ```
+    Diff review confirms comment matches change.
+
+## 16.6 Higher-Level Comments Are Easier to Maintain
+
+- **Principle**: High-level, abstract comments are less affected by code changes, making them easier to maintain.
+- **Balance**: Combine high-level comments for intuition with precise comments where needed (Chapter 13).
+- **Example**:
+  - **Detailed (Harder to Maintain)**:
+    ```java
+    /*
+     * Increments counter by 1 and logs the result.
+     */
+    counter++;
+    log.info("Counter: " + counter);
+    ```
+    Tied to specific implementation, fragile to changes.
+  - **High-Level (Easier to Maintain)**:
+    ```java
+    /*
+     * Updates the counter and logs its new value.
+     */
+    counter++;
+    log.info("Counter: " + counter);
+    ```
+    Abstract comment remains valid if logging details change.
+
+## Conclusion
+
+- **Goal**: Maintain a clean system design during modifications by adopting a strategic approach and keeping comments up-to-date.
+- **Key Practices**: Place comments near code, avoid duplication, document in code (not commit logs), review diffs, and use high-level comments for maintainability.
+- **Outcome**: These techniques prevent complexity creep, ensuring the system remains easy to understand and enhance over time.

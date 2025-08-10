@@ -5,7 +5,7 @@
 ============================================================
 
 1. Data Structures and Algorithms  - Cracking the code interview , Groking Systme design
-2. Computer Science Fundamentals 
+2. Computer Science Fundamentals - CS101
 3. Networking
 4. Operating Systems
 5. Security Fundamentals (OWASP Top 10, XSS, CSRF, SQL Injection, AuthN/AuthZ)
